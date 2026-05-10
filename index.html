@@ -87,16 +87,15 @@
 
     /* ── HERO ── */
     .hero {
-      min-height: 100vh;
       display: flex; align-items: center;
-      padding: 100px 40px 80px;
+      padding: 84px 40px 40px;
       max-width: 1100px;
       margin: 0 auto;
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 64px;
+      grid-template-columns: 1fr 340px;
+      gap: 48px;
       align-items: center;
       width: 100%;
     }
@@ -111,7 +110,7 @@
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px; font-weight: 600; letter-spacing: .5px;
-      margin-bottom: 28px;
+      margin-bottom: 16px;
     }
     .status-dot {
       width: 7px; height: 7px;
@@ -130,12 +129,13 @@
       margin-bottom: 8px;
     }
     .hero-name {
-      font-size: clamp(52px, 6vw, 80px);
+      font-size: clamp(40px, 5vw, 64px);
       font-weight: 900;
       line-height: 1;
-      letter-spacing: -3px;
+      letter-spacing: -2px;
+      white-space: nowrap;
       color: var(--white);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .hero-name span { color: var(--orange); }
 
@@ -151,7 +151,7 @@
     .hero-sub {
       display: flex; flex-wrap: wrap; gap: 6px 16px;
       font-size: 13px; color: var(--muted2);
-      margin-bottom: 36px;
+      margin-bottom: 20px;
     }
     .hero-sub span { display: flex; align-items: center; gap: 6px; }
     .hero-sub span::before { content:'·'; color: var(--orange); }
@@ -184,7 +184,7 @@
     }
     .photo-card img {
       width: 100%; display: block;
-      aspect-ratio: 3/4;
+      aspect-ratio: 4/5;
       object-fit: cover;
       object-position: top center;
     }
@@ -240,7 +240,7 @@
     }
 
     /* ── SECTION COMMON ── */
-    section { padding: 96px 0; border-top: 1px solid var(--border); }
+    section { padding: 56px 0; border-top: 1px solid var(--border); }
     .eyebrow {
       font-size: 11px; font-weight: 700; letter-spacing: 3px;
       color: var(--orange); text-transform: uppercase;
@@ -266,7 +266,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      margin-top: 56px;
+      margin-top: 0;
     }
     .stat-card {
       background: var(--bg2);
@@ -593,7 +593,7 @@
           AVAILABLE FOR 2026 Q2 — Q3 출강
         </div>
         <div class="hero-name-kr">Kim Nuri</div>
-        <h1 class="hero-name">Nuri<br><span>Kim</span></h1>
+        <h1 class="hero-name">Nuri <span>Kim</span></h1>
         <p class="hero-tagline">
           <strong>감 잡아주는</strong> 테크 트레이너<br>
           이론 30%, 실습 70%로 끝까지 완주시킵니다.
@@ -612,14 +612,16 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
             skilleat.com
           </a>
-          <a class="chip" href="https://www.youtube.com/@feeltechedu" target="_blank">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8 0 12 0 12s0 4 .5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 16 24 12 24 12s0-4-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-            YouTube · 감테크
-          </a>
-          <a class="chip" href="#" target="_blank">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3v9zM6.5 8.3a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.7c0-1.1 0-2.5-1.5-2.5S13 13 13 14.2V19h-3v-9h2.9v1.3h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19z"/></svg>
-            LinkedIn
-          </a>
+          <div style="display:flex;gap:10px;width:100%">
+            <a class="chip" href="https://www.youtube.com/@feeltechedu" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8 0 12 0 12s0 4 .5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 16 24 12 24 12s0-4-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+              YouTube · 감테크
+            </a>
+            <a class="chip" href="#" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3v9zM6.5 8.3a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.7c0-1.1 0-2.5-1.5-2.5S13 13 13 14.2V19h-3v-9h2.9v1.3h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19z"/></svg>
+              LinkedIn
+            </a>
+          </div>
         </div>
       </div>
 
