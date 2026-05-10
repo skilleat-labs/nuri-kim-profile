@@ -441,6 +441,9 @@
     .tl-org { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
     .tl-role { font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 8px; }
     .tl-detail { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .tl-list { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .tl-list li { font-size: 14px; color: var(--muted); line-height: 1.6; padding-left: 14px; position: relative; }
+    .tl-list li::before { content: '›'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
 
     /* ── CONTENT ── */
     .assets-grid {
@@ -720,7 +723,12 @@
         <div class="tl-right">
           <div class="tl-org">Skilleat</div>
           <div class="tl-role">대표 / Technical Trainer</div>
-          <div class="tl-detail">기업·공공 대상 Microsoft Azure / Kubernetes / 생성형 AI 교육 사업 운영. 자체 커리큘럼 설계 및 출강.</div>
+          <ul class="tl-list">
+            <li>클라우드·Kubernetes 교육 콘텐츠 기획 및 제작</li>
+            <li>기업·공공기관 대상 오프라인 교육 강의</li>
+            <li>YouTube "감테크" 채널 운영 (IT 교육 콘텐츠)</li>
+            <li>『(가제) 쿠버네티스』 서적 집필 중</li>
+          </ul>
         </div>
       </div>
       <div class="tl-item reveal" style="transition-delay:.05s">
@@ -728,7 +736,11 @@
         <div class="tl-right">
           <div class="tl-org">NHN Cloud</div>
           <div class="tl-role">Cloud Tech Trainer</div>
-          <div class="tl-detail">NHN Cloud 인프라 / 컨테이너 / 운영 관련 사내·외부 교육 진행. 신규 입사자 온보딩 커리큘럼 운영.</div>
+          <ul class="tl-list">
+            <li>기업·공공기관 대상 클라우드 및 Kubernetes 실무 교육</li>
+            <li>NHN Cloud Education Center 월 단위 정기 교육 프로그램 운영</li>
+            <li>클라우드 엔지니어 및 실무자 대상 기술 교육 설계</li>
+          </ul>
         </div>
       </div>
       <div class="tl-item reveal" style="transition-delay:.1s">
@@ -736,7 +748,10 @@
         <div class="tl-right">
           <div class="tl-org">NIT Services <span style="color:var(--muted);font-size:13px;font-weight:400">— NAVER 계열</span></div>
           <div class="tl-role">Cloud Operations Engineer</div>
-          <div class="tl-detail">NAVER 그룹 내부 클라우드 인프라 운영 — 모니터링, 장애 대응, 운영 자동화.</div>
+          <ul class="tl-list">
+            <li>클라우드 인프라 운영 및 자동화 실무</li>
+            <li>서비스 안정성 확보를 위한 모니터링 및 장애 대응</li>
+          </ul>
         </div>
       </div>
     </div>
