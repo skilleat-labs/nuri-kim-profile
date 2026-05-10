@@ -529,6 +529,64 @@
     .cta-btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
     .cta-btn svg { width: 15px; height: 15px; }
 
+    /* ── HISTORY ── */
+    .history-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+    .h-badge {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px; font-weight: 500;
+    }
+    .h-badge-sm {
+      background: rgba(255,107,43,0.08);
+      border: 1px solid rgba(255,107,43,0.2);
+      color: var(--orange2);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 12px; font-weight: 600;
+      white-space: nowrap;
+    }
+    .history-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .history-toggle:hover { border-color: var(--orange); color: var(--text); }
+    .history-table {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .ht-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .ht-row:last-child { border-bottom: none; }
+    .ht-head { background: var(--bg3); }
+    .ht-cell {
+      padding: 14px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+    }
+    .ht-head .ht-cell {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1px; color: var(--muted2);
+      text-transform: uppercase;
+    }
+    .ht-cell:first-child { border-right: 1px solid var(--border); }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -581,6 +639,7 @@
       <a href="#microsoft">Microsoft Activity</a>
       <a href="#content">Content</a>
       <a href="#teaching">Teaching</a>
+      <a href="#history">History</a>
       <a href="#certs">Certs</a>
       <a href="#philosophy">Philosophy</a>
     </div>
@@ -916,6 +975,84 @@
   </div>
 </section>
 
+<!-- HISTORY -->
+<section id="history">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">06 · Teaching History</div>
+      <h2 class="section-title">강의 이력</h2>
+      <p class="section-sub">다양한 업종·규모의 기업과 기관에서 강의를 진행했습니다.</p>
+    </div>
+
+    <div class="history-badges reveal" style="margin-top:32px">
+      <span class="h-badge">공공기관</span>
+      <span class="h-badge">글로벌 IT 기업</span>
+      <span class="h-badge">금융권</span>
+      <span class="h-badge">금융 계열 IT</span>
+      <span class="h-badge">IT 교육기관</span>
+      <span class="h-badge">MSP 파트너</span>
+      <span class="h-badge">IT 기업</span>
+      <span class="h-badge">지역 실무자</span>
+    </div>
+
+    <div class="reveal" style="margin-top:20px">
+      <button class="history-toggle" onclick="toggleHistory()">
+        <span id="history-toggle-text">강의 이력 상세 보기</span>
+        <svg id="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;transition:transform .3s"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+
+    <div id="history-detail" style="display:none;margin-top:16px">
+      <div class="history-table reveal">
+        <div class="ht-row ht-head">
+          <div class="ht-cell">업종 · 규모</div>
+          <div class="ht-cell">교육 내용</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">공공기관</span></div>
+          <div class="ht-cell">AI-900 (Azure AI Fundamentals) 자격증 대비 강의</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">글로벌 IT 기업</span></div>
+          <div class="ht-cell">GitHub Copilot Agent Mode — Lab Proctor (Microsoft AI Tour Korea 2026)</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">IT 교육기관</span></div>
+          <div class="ht-cell">Docker & Kubernetes 실무 교육</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">금융 계열 IT</span></div>
+          <div class="ht-cell">클라우드 엔지니어 양성과정 — 인프라, 네트워크, Linux, Python, Docker, Kubernetes</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">금융권</span></div>
+          <div class="ht-cell">클라우드 인프라 이해 교육</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">공공기관</span></div>
+          <div class="ht-cell">클라우드 인프라 구조 및 컨테이너 기술 개요</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">MSP 파트너</span></div>
+          <div class="ht-cell">NHN Cloud 서비스 운영 인프라 교육</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">MSP 파트너</span></div>
+          <div class="ht-cell">클라우드 인프라 운영 및 DevOps 기초</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">지역 실무자</span></div>
+          <div class="ht-cell">가상화, 클라우드, 컨테이너 기술 교육</div>
+        </div>
+        <div class="ht-row">
+          <div class="ht-cell"><span class="h-badge-sm">IT 기업</span></div>
+          <div class="ht-cell">클라우드 엔지니어 대상 월 정기 교육 (NHN Cloud Education Center)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CERTS -->
 <section id="certs">
   <div class="wrap">
@@ -1024,6 +1161,18 @@
     });
   }, { threshold: 0.5 });
   counters.forEach(c => cio.observe(c));
+
+  // Teaching history toggle
+  function toggleHistory() {
+    const detail = document.getElementById('history-detail');
+    const text = document.getElementById('history-toggle-text');
+    const arrow = document.getElementById('history-arrow');
+    const open = detail.style.display === 'none';
+    detail.style.display = open ? 'block' : 'none';
+    text.textContent = open ? '강의 이력 접기' : '강의 이력 상세 보기';
+    arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+  window.toggleHistory = toggleHistory;
 
   // Copy email
   document.querySelectorAll('[data-copy]').forEach(btn => {
