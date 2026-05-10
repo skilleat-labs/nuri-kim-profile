@@ -388,7 +388,8 @@
     }
     .teach-card:hover { border-color: var(--orange); }
     .teach-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-    .teach-emoji { font-size: 28px; flex-shrink: 0; }
+    .teach-emoji { width: 40px; height: 40px; flex-shrink: 0; background: rgba(255,107,43,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--orange); }
+    .teach-emoji svg { width: 20px; height: 20px; }
     .teach-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
     .teach-num { font-size: 11px; color: var(--orange); font-family: monospace; }
     .teach-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -461,7 +462,8 @@
       transition: border-color .2s;
     }
     .asset:hover { border-color: var(--orange); }
-    .asset-emoji { font-size: 28px; }
+    .asset-emoji { width: 40px; height: 40px; flex-shrink: 0; background: rgba(255,107,43,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--orange); }
+    .asset-emoji svg { width: 20px; height: 20px; }
     .asset-status {
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
       padding: 3px 10px; border-radius: 6px; display: inline-block;
@@ -826,7 +828,7 @@
     </div>
     <div class="assets-grid">
       <div class="asset reveal">
-        <div class="asset-emoji">📘</div>
+        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <span class="asset-status upcoming">● 2026 출간 예정</span>
         <div>
           <div class="asset-title">쿠버네티스 입문 서적</div>
@@ -834,7 +836,7 @@
         </div>
       </div>
       <div class="asset reveal" style="transition-delay:.06s">
-        <div class="asset-emoji">📺</div>
+        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></div>
         <span class="asset-status live">● LIVE</span>
         <div>
           <div class="asset-title">YouTube · 감테크</div>
@@ -843,7 +845,7 @@
         <a href="https://www.youtube.com/@feeltechedu" target="_blank" class="asset-link">채널 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
       <div class="asset reveal" style="transition-delay:.12s">
-        <div class="asset-emoji">💻</div>
+        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
         <span class="asset-status preparing">● 준비 중</span>
         <div>
           <div class="asset-title">인프런 강의</div>
@@ -863,7 +865,7 @@
     </div>
     <div class="teach-grid">
       <div class="teach-card reveal">
-        <div class="teach-head"><div class="teach-emoji">🤖</div>
+        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/><path d="M9 17c1 1 5 1 6 0"/></svg></div>
           <div><div class="teach-title">생성형 AI · Microsoft AI</div><div class="teach-num">// TRACK_01</div></div>
         </div>
         <ul class="teach-list">
@@ -875,7 +877,7 @@
         </ul>
       </div>
       <div class="teach-card reveal" style="transition-delay:.05s">
-        <div class="teach-head"><div class="teach-emoji">☁️</div>
+        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
           <div><div class="teach-title">Microsoft Azure</div><div class="teach-num">// TRACK_02</div></div>
         </div>
         <ul class="teach-list">
@@ -887,7 +889,7 @@
         </ul>
       </div>
       <div class="teach-card reveal" style="transition-delay:.1s">
-        <div class="teach-head"><div class="teach-emoji">🚀</div>
+        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
           <div><div class="teach-title">Kubernetes · Container · DevOps</div><div class="teach-num">// TRACK_03</div></div>
         </div>
         <ul class="teach-list">
@@ -899,7 +901,7 @@
         </ul>
       </div>
       <div class="teach-card reveal" style="transition-delay:.15s">
-        <div class="teach-head"><div class="teach-emoji">🔧</div>
+        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
           <div><div class="teach-title">클라우드 기초</div><div class="teach-num">// TRACK_04</div></div>
         </div>
         <ul class="teach-list">
