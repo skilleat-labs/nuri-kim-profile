@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김누리 · Nuri Kim — 감 잡아주는 테크 트레이너</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0B1220;
+      --card: #111827;
+      --border: #1E2D45;
+      --accent: #50E6FF;
+      --accent2: #0078D4;
+      --text: #F1F5F9;
+      --muted: #94A3B8;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0d1f3c 0%, #0B1220 100%);
+      padding: 48px 40px 36px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(80,230,255,0.12) 0%, transparent 70%);
+    }
+
+    .avatar-wrap {
+      flex-shrink: 0;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      overflow: hidden;
+      box-shadow: 0 0 24px rgba(80,230,255,0.3);
+    }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-info { flex: 1; }
+
+    .name-kr {
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .name-en {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #F1F5F9 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .tagline strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Body */
+    .body { padding: 36px 40px; display: flex; flex-direction: column; gap: 28px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+
+    /* Bio */
+    .bio {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .bio strong { color: var(--text); }
+
+    /* Skills */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      background: rgba(80,230,255,0.08);
+      border: 1px solid rgba(80,230,255,0.2);
+      color: var(--accent);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* Links */
+    .links { display: flex; flex-direction: column; gap: 12px; }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .link-item:hover {
+      background: rgba(80,230,255,0.06);
+      border-color: rgba(80,230,255,0.15);
+      color: var(--text);
+    }
+
+    .link-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(80,230,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .link-text { flex: 1; }
+    .link-label { font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: 0.5px; }
+    .link-value { font-size: 14px; color: var(--text); margin-top: 1px; }
+
+    /* Footer */
+    .footer {
+      padding: 18px 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 12px;
+      color: #334155;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 500px) {
+      .hero { flex-direction: column; align-items: flex-start; padding: 32px 24px 28px; gap: 20px; }
+      .body { padding: 28px 24px; }
+      .footer { padding: 16px 24px; }
+      .name-en { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="hero">
+      <div class="avatar-wrap">
+        <img src="nrkim.png" alt="Nuri Kim 프로필 사진">
+      </div>
+      <div class="hero-info">
+        <div class="name-kr">김누리</div>
+        <div class="name-en">Nuri Kim</div>
+        <div class="tagline"><strong>감 잡아주는</strong> 테크 트레이너</div>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <div>
+        <div class="section-label">About</div>
+        <p class="bio">
+          복잡한 기술을 <strong>쉽고 명확하게</strong> 전달하는 테크 트레이너.
+          현장에서 바로 써먹을 수 있는 실전 중심의 교육을 설계하고 진행합니다.
+        </p>
+      </div>
+
+      <hr class="divider">
+
+      <div>
+        <div class="section-label">Skills & Topics</div>
+        <div class="tags">
+          <span class="tag">AI / LLM</span>
+          <span class="tag">Claude</span>
+          <span class="tag">프롬프트 엔지니어링</span>
+          <span class="tag">Microsoft 365</span>
+          <span class="tag">업무 자동화</span>
+          <span class="tag">Tech Training</span>
+          <span class="tag">디지털 전환</span>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div>
+        <div class="section-label">Contact</div>
+        <div class="links">
+          <a class="link-item" href="mailto:nuri@skilleat.kr">
+            <div class="link-icon">✉️</div>
+            <div class="link-text">
+              <div class="link-label">Email</div>
+              <div class="link-value">nuri@skilleat.kr</div>
+            </div>
+          </a>
+          <a class="link-item" href="https://github.com/skilleat-labs" target="_blank">
+            <div class="link-icon">🐙</div>
+            <div class="link-text">
+              <div class="link-label">GitHub</div>
+              <div class="link-value">github.com/skilleat-labs</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">SKILLEAT · TECH TRAINER · 2025</div>
+  </div>
+</body>
+</html>
