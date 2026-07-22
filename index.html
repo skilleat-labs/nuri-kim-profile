@@ -173,6 +173,15 @@
     .chip svg { width: 15px; height: 15px; flex-shrink: 0; }
     .chip.copied { color: var(--orange); border-color: var(--orange); }
 
+    /* Hero CTA chip */
+    .chip-primary {
+      background: var(--orange); color: #fff;
+      border-color: var(--orange); font-weight: 700;
+      font-size: 14px; padding: 11px 22px;
+      width: 100%; justify-content: center;
+    }
+    .chip-primary:hover { opacity: .85; color: #fff; border-color: var(--orange); }
+
     /* Right — Photo Card */
     .hero-right { position: relative; }
     .photo-card {
@@ -208,17 +217,6 @@
     }
     .photo-card-role {
       font-size: 12px; color: var(--muted); margin-top: 2px;
-    }
-    .photo-card-stats {
-      display: flex; gap: 20px; margin-top: 14px;
-    }
-    .pcs-item .v {
-      font-size: 20px; font-weight: 800; color: var(--white);
-    }
-    .pcs-item .v span { color: var(--orange); }
-    .pcs-item .l {
-      font-size: 10px; font-weight: 600; letter-spacing: 1px;
-      color: var(--muted2); text-transform: uppercase;
     }
 
     /* Decorative dots */
@@ -403,6 +401,13 @@
       color: var(--orange); font-weight: 700;
     }
 
+    /* Track meta bar */
+    .track-meta-bar {
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted2); font-family: monospace;
+    }
+
     /* ── CERTS ── */
     .cert-grid {
       display: grid;
@@ -480,6 +485,12 @@
     }
     .asset-link svg { width: 13px; height: 13px; }
 
+    /* Content grid 2x2 */
+    .assets-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 48px;
+    }
+
     /* ── PHILOSOPHY ── */
     .philo-grid {
       display: grid;
@@ -499,36 +510,6 @@
     .philo-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
     .philo-body { font-size: 14px; color: var(--muted); line-height: 1.8; }
 
-    /* ── CTA ── */
-    .cta {
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      border-radius: 20px;
-      padding: 48px;
-      display: flex;
-      justify-content: space-between; align-items: center;
-      gap: 32px;
-    }
-    .cta h3 { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
-    .cta p { font-size: 14px; color: var(--muted); max-width: 400px; line-height: 1.7; }
-    .cta-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 22px;
-      border-radius: 10px;
-      font-size: 14px; font-weight: 600;
-      transition: all .2s; white-space: nowrap;
-    }
-    .cta-btn-primary { background: var(--orange); color: #fff; }
-    .cta-btn-primary:hover { opacity: .85; }
-    .cta-btn-secondary {
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      color: var(--text);
-    }
-    .cta-btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
-    .cta-btn svg { width: 15px; height: 15px; }
-
     /* ── HISTORY ── */
     .history-badges { display: flex; flex-wrap: wrap; gap: 10px; }
     .h-badge {
@@ -539,6 +520,10 @@
       border-radius: 20px;
       font-size: 13px; font-weight: 500;
     }
+    .h-badge em {
+      font-style: normal; color: var(--orange);
+      font-size: 11px; font-weight: 700; margin-left: 4px;
+    }
     .h-badge-sm {
       background: rgba(255,107,43,0.08);
       border: 1px solid rgba(255,107,43,0.2);
@@ -548,44 +533,94 @@
       font-size: 12px; font-weight: 600;
       white-space: nowrap;
     }
-    .history-toggle {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      color: var(--muted);
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 13px; font-weight: 600;
-      cursor: pointer;
-      transition: all .2s;
+
+    /* Featured history cards */
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 16px; margin-top: 24px;
     }
-    .history-toggle:hover { border-color: var(--orange); color: var(--text); }
-    .history-table {
+    .feat-card {
       background: var(--bg2);
+      border: 1px solid rgba(255,107,43,0.3);
+      border-radius: 16px; padding: 24px;
+      transition: border-color .2s;
+    }
+    .feat-card:hover { border-color: var(--orange); }
+    .feat-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: var(--orange); margin-bottom: 10px;
+    }
+    .feat-title {
+      font-size: 16px; font-weight: 700; color: var(--white);
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* Compact history list */
+    .hist-list {
+      display: grid; grid-template-columns: 1fr 1fr;
+      margin-top: 24px;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
+      border-radius: 16px; overflow: hidden;
+      background: var(--bg2);
     }
-    .ht-row {
-      display: grid;
-      grid-template-columns: 160px 1fr;
+    .hist-item {
+      display: flex; align-items: baseline; gap: 12px;
+      padding: 11px 18px;
       border-bottom: 1px solid var(--border);
+      min-width: 0;
     }
-    .ht-row:last-child { border-bottom: none; }
-    .ht-head { background: var(--bg3); }
-    .ht-cell {
-      padding: 14px 20px;
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-    }
-    .ht-head .ht-cell {
+    .hist-item:nth-child(2n+1) { border-right: 1px solid var(--border); }
+    .hist-item:last-child { border-bottom: none; }
+    .hist-sector {
+      flex-shrink: 0; width: 80px;
       font-size: 11px; font-weight: 700;
-      letter-spacing: 1px; color: var(--muted2);
-      text-transform: uppercase;
+      color: var(--muted2); letter-spacing: .3px;
     }
-    .ht-cell:first-child { border-right: 1px solid var(--border); }
+    .hist-course {
+      flex: 1; font-size: 13px; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* Subsection label */
+    .subsection-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      color: var(--muted2); text-transform: uppercase;
+      margin-top: 40px; margin-bottom: 12px;
+    }
+
+    /* Footer CTA section */
+    .footer-cta {
+      border-top: 1px solid var(--border);
+      padding: 72px 0;
+    }
+    .footer-cta-inner {
+      text-align: center; max-width: 600px; margin: 0 auto;
+    }
+    .footer-cta-inner h2 {
+      font-size: clamp(22px, 3vw, 34px); font-weight: 800;
+      color: var(--white); letter-spacing: -1px;
+      margin-bottom: 14px; line-height: 1.2;
+    }
+    .footer-cta-inner p {
+      font-size: 15px; color: var(--muted);
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .footer-cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .cta-btn-lg {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 13px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 700; transition: opacity .2s;
+    }
+    .cta-btn-lg:hover { opacity: .85; }
+    .cta-btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg3); border: 1px solid var(--border2);
+      color: var(--text); padding: 13px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 600; transition: all .2s;
+    }
+    .cta-btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
 
     /* ── FOOTER ── */
     footer {
@@ -609,16 +644,19 @@
       .cert-grid { grid-template-columns: 1fr 1fr; }
       .assets-grid { grid-template-columns: 1fr; }
       .philo-grid { grid-template-columns: 1fr; }
-      .cta { flex-direction: column; text-align: center; }
-      .cta p { max-width: 100%; }
       .nav-links { display: none; }
+    }
+    @media (max-width: 768px) {
+      .feat-grid { grid-template-columns: 1fr; }
+      .hist-list { grid-template-columns: 1fr; }
+      .hist-item:nth-child(2n+1) { border-right: none; }
+      .assets-grid-2 { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .wrap { padding: 0 20px; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .cert-grid { grid-template-columns: 1fr; }
       .tl-item { grid-template-columns: 1fr; gap: 4px; }
-      .cta { padding: 28px; }
       .ms-highlight { padding: 20px; }
       .ms-head { flex-direction: column; gap: 12px; }
     }
@@ -634,12 +672,11 @@
       김누리 <span style="color:var(--muted);font-weight:400;margin-left:6px">· 감테크</span>
     </div>
     <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#career">Career</a>
-      <a href="#history">History</a>
       <a href="#teaching">Teaching</a>
-      <a href="#microsoft">Microsoft Activity</a>
+      <a href="#history">History</a>
+      <a href="#microsoft">Microsoft</a>
       <a href="#certs">Certs</a>
+      <a href="#about">About</a>
       <a href="#content">Content</a>
       <a href="#philosophy">Philosophy</a>
     </div>
@@ -668,6 +705,10 @@
           <span>생성형 AI · Microsoft AI · Azure</span>
         </div>
         <div class="contact-bar">
+          <a class="chip chip-primary" href="mailto:nr@skilleat.com?subject=[교육 문의] ">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            교육 문의하기
+          </a>
           <button class="chip" data-copy="nr@skilleat.com" title="이메일 복사">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
             nr@skilleat.com
@@ -692,23 +733,10 @@
       <div class="hero-right reveal" style="transition-delay:.15s">
         <div class="photo-card">
           <img src="nrkim.png" alt="김누리 프로필">
+          <div class="photo-card-badge"><span>MCT</span> CERTIFIED TRAINER 2026</div>
           <div class="photo-card-bottom">
             <div class="photo-card-name">김누리 / Nuri Kim</div>
             <div class="photo-card-role">Skilleat — Founder · Tech Trainer</div>
-            <div class="photo-card-stats">
-              <div class="pcs-item">
-                <div class="v">1,000<span>+</span></div>
-                <div class="l">Teaching Hrs</div>
-              </div>
-              <div class="pcs-item">
-                <div class="v">20<span>+</span></div>
-                <div class="l">Enterprises</div>
-              </div>
-              <div class="pcs-item">
-                <div class="v">8<span>개</span></div>
-                <div class="l">Certs</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -745,247 +773,73 @@
   </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about">
+<!-- TEACHING (01) -->
+<section id="teaching">
   <div class="wrap">
-    <div class="reveal"><div class="eyebrow">01 · About</div>
-      <h2 class="section-title">실무에서 강의로,<br>현장의 언어로 가르칩니다.</h2>
+    <div class="reveal">
+      <div class="eyebrow">01 · Lecture Areas</div>
+      <h2 class="section-title">강의 가능한 영역</h2>
+      <p class="section-sub">기업·공공기관 출강 및 사내 교육 요청이 가능한 기술 영역입니다. 대상과 수준에 맞게 커리큘럼을 조정하여 진행합니다.</p>
     </div>
-    <div class="about-grid">
-      <div class="about-summary reveal">
-        <div style="display:flex;flex-direction:column;gap:16px;font-family:monospace;font-size:14px;">
-          <div style="color:var(--muted2)">// 2017 — <span style="color:var(--text);font-weight:600">CLOUD OPS</span></div>
-          <div style="color:var(--muted2)">// 2022 — <span style="color:var(--text);font-weight:600">TECH TRAINER</span></div>
-          <div style="color:var(--muted2)">// 2025 — <span style="color:var(--orange);font-weight:600">FOUNDER, SKILLEAT</span></div>
-        </div>
-      </div>
-      <div class="about-detail reveal" style="transition-delay:.1s">
-        <p>NIT Services(NAVER 계열), NHN Cloud에서 클라우드 운영·교육 실무를 거치며 인프라부터 사용자 트러블슈팅까지 전 과정을 직접 경험했습니다. 현재는 <strong style="color:#fff">Skilleat 대표</strong>로 기업·공공 대상 Microsoft Azure, Kubernetes, 생성형 AI 교육을 진행하고 있으며, Microsoft AI-900(Azure AI Fundamentals) 자격증 대비 강의도 운영하고 있습니다.</p>
-        <p>2026년 1월 <strong style="color:var(--orange)">Microsoft Certified Trainer</strong>로 등록되었고, 같은 해 3월 Microsoft AI Tour Korea에서 GitHub Copilot Agent Mode Lab Proctor로 참여했습니다.</p>
-        <div class="keywords">
-          <span class="kw">Azure</span><span class="kw">Kubernetes</span><span class="kw">GenAI</span>
-          <span class="kw">DevOps</span><span class="kw">GitHub Copilot</span><span class="kw">IaC</span>
-          <span class="kw">Cloud</span><span class="kw">Architecture</span><span class="kw">Curriculum Design</span>
-        </div>
-      </div>
-    </div>
+    <div id="teach-grid" class="teach-grid"></div>
   </div>
 </section>
 
-<!-- CAREER -->
-<section id="career">
-  <div class="wrap">
-    <div class="reveal"><div class="eyebrow">02 · Career</div>
-      <h2 class="section-title">커리어 타임라인</h2>
-    </div>
-    <div class="timeline">
-      <div class="tl-item current reveal">
-        <div class="tl-period">2025 — 현재</div>
-        <div class="tl-right">
-          <div class="tl-org">Skilleat</div>
-          <div class="tl-role">대표 / Technical Trainer</div>
-          <ul class="tl-list">
-            <li>클라우드·Kubernetes 교육 콘텐츠 기획 및 제작</li>
-            <li>기업·공공기관 대상 오프라인 교육 강의</li>
-            <li>YouTube "감테크" 채널 운영 (IT 교육 콘텐츠)</li>
-            <li>『(가제) 쿠버네티스』 서적 집필 중</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-item reveal" style="transition-delay:.05s">
-        <div class="tl-period">~ 2025</div>
-        <div class="tl-right">
-          <div class="tl-org">NHN Cloud</div>
-          <div class="tl-role">Cloud Tech Trainer</div>
-          <ul class="tl-list">
-            <li>기업·공공기관 대상 클라우드 및 Kubernetes 실무 교육</li>
-            <li>NHN Cloud Education Center 월 단위 정기 교육 프로그램 운영</li>
-            <li>클라우드 엔지니어 및 실무자 대상 기술 교육 설계</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-item reveal" style="transition-delay:.1s">
-        <div class="tl-period">EARLIER</div>
-        <div class="tl-right">
-          <div class="tl-org">NIT Services <span style="color:var(--muted);font-size:13px;font-weight:400">— NAVER 계열</span></div>
-          <div class="tl-role">Cloud Operations Engineer</div>
-          <ul class="tl-list">
-            <li>클라우드 인프라 운영 및 자동화 실무</li>
-            <li>서비스 안정성 확보를 위한 모니터링 및 장애 대응</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HISTORY -->
+<!-- HISTORY (02) -->
 <section id="history">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">03 · Teaching History</div>
+      <div class="eyebrow">02 · Teaching History</div>
       <h2 class="section-title">강의 이력</h2>
       <p class="section-sub">다양한 업종·규모의 기업과 기관에서 강의를 진행했습니다.</p>
     </div>
 
+    <!-- Industry tags with counts -->
     <div class="history-badges reveal" style="margin-top:32px">
-      <span class="h-badge">공공기관</span>
-      <span class="h-badge">글로벌 IT 기업</span>
-      <span class="h-badge">금융권</span>
-      <span class="h-badge">금융 계열 IT</span>
-      <span class="h-badge">의료기관</span>
-      <span class="h-badge">IT 교육기관</span>
-      <span class="h-badge">MSP 파트너</span>
-      <span class="h-badge">IT 기업</span>
-      <span class="h-badge">지역 실무자</span>
+      <span class="h-badge">공공기관 <em>×2</em></span>
+      <span class="h-badge">금융권 <em>×1</em></span>
+      <span class="h-badge">금융 계열 IT <em>×1</em></span>
+      <span class="h-badge">글로벌 IT <em>×2</em></span>
+      <span class="h-badge">의료기관 <em>×1</em></span>
+      <span class="h-badge">IT 교육기관 <em>×3</em></span>
+      <span class="h-badge">MSP 파트너 <em>×2</em></span>
+      <span class="h-badge">IT 기업 <em>×1</em></span>
+      <span class="h-badge">지역 실무자 <em>×1</em></span>
+      <span class="h-badge">대기업 아카데미 <em>×1</em></span>
+      <span class="h-badge">파트너사 <em>×1</em></span>
     </div>
 
-    <div class="reveal" style="margin-top:20px">
-      <button class="history-toggle" onclick="toggleHistory()">
-        <span id="history-toggle-text">강의 이력 상세 보기</span>
-        <svg id="history-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;transition:transform .3s"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-    </div>
-
-    <div id="history-detail" style="display:none;margin-top:16px">
-      <div class="history-table reveal">
-        <div class="ht-row ht-head">
-          <div class="ht-cell">업종 · 규모</div>
-          <div class="ht-cell">교육 내용</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">글로벌 기업</span></div>
-          <div class="ht-cell">Microsoft Copilot & Copilot Studio 기업 교육 — MS-4018(Microsoft 365 Copilot 활용) · MS-4019(Copilot Agent 기반 업무 자동화) · MS-4022(Copilot Studio 기반 AI Agent 개발) 공식 과정, CoorsTek Korea 임직원 약 30명 대상, Prompt Engineering · Knowledge · Actions · Workflow 실습 진행 (교육 운영: VoltEdge Learning, Japan, 2026.07)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">IT 교육기관</span></div>
-          <div class="ht-cell">멀티캠퍼스 정기 강의 — Azure / Kubernetes / 생성형 AI 과정 (2026, 정기 진행 중)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">의료기관</span></div>
-          <div class="ht-cell">생성형 AI 활용 강의 — KMI 한국의학연구소(건강검진센터) 임직원 대상 (2026)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">파트너사</span></div>
-          <div class="ht-cell">GitHub Copilot 실습 교육 — Microsoft 파트너사 대상 보조강사 참여 (2026.05.28)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">기업 임직원</span></div>
-          <div class="ht-cell">Docker → Kubernetes 전환 실습 — K8s 전반 흐름 · Probe/Resource/HPA · GitHub Actions + ArgoCD · Azure ACI/ACA/ACR 활용 Cloud PaaS 전환 시나리오 교육 (LG CNS 대중소상생 아카데미, 9일, 2026.05)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">IT 교육기관</span></div>
-          <div class="ht-cell">컨테이너 기반 Composable Architecture 설계 · ECS 배포 · Kubernetes 운영 · CI/CD 자동화 (모듈 8~11, 4개 과정) — 커리큘럼 설계 및 강의 진행 (2026.05)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">공공기관</span></div>
-          <div class="ht-cell">AI-900 (Azure AI Fundamentals) 자격증 대비 강의</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">글로벌 IT 기업</span></div>
-          <div class="ht-cell">GitHub Copilot Agent Mode — Lab Proctor (Microsoft AI Tour Korea 2026)</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">IT 교육기관</span></div>
-          <div class="ht-cell">Docker & Kubernetes 실무 교육</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">금융 계열 IT</span></div>
-          <div class="ht-cell">클라우드 엔지니어 양성과정 — 인프라, 네트워크, Linux, Python, Docker, Kubernetes</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">금융권</span></div>
-          <div class="ht-cell">클라우드 인프라 이해 교육</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">공공기관</span></div>
-          <div class="ht-cell">클라우드 인프라 구조 및 컨테이너 기술 개요</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">MSP 파트너</span></div>
-          <div class="ht-cell">NHN Cloud 서비스 운영 인프라 교육</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">MSP 파트너</span></div>
-          <div class="ht-cell">클라우드 인프라 운영 및 DevOps 기초</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">지역 실무자</span></div>
-          <div class="ht-cell">가상화, 클라우드, 컨테이너 기술 교육</div>
-        </div>
-        <div class="ht-row">
-          <div class="ht-cell"><span class="h-badge-sm">IT 기업</span></div>
-          <div class="ht-cell">클라우드 엔지니어 대상 월 정기 교육 (NHN Cloud Education Center)</div>
-        </div>
+    <!-- Featured cards -->
+    <div class="subsection-eyebrow reveal">대표 사례</div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-label">글로벌 IT · 공개 행사</div>
+        <div class="feat-title">Microsoft AI Tour Korea 2026</div>
+        <div class="feat-desc">GitHub Copilot Agent Mode — Lab Proctor. 참가자 실습 진행 및 트러블슈팅 지원</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.05s">
+        <div class="feat-label">대기업 아카데미 · 9일 과정</div>
+        <div class="feat-title">LG CNS 대중소상생 아카데미</div>
+        <div class="feat-desc">Docker → Kubernetes 전환 실습 · GitOps(GitHub Actions + ArgoCD) · Azure PaaS 전환 시나리오 (2026.05)</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.1s">
+        <div class="feat-label">IT 기업 · 월 정기 교육</div>
+        <div class="feat-title">NHN Cloud Education Center</div>
+        <div class="feat-desc">클라우드 엔지니어 대상 월 단위 정기 기술 교육 운영</div>
       </div>
     </div>
+
+    <!-- Compact list (data-driven) -->
+    <div class="subsection-eyebrow reveal">전체 이력</div>
+    <div id="hist-list" class="hist-list reveal"></div>
   </div>
 </section>
 
-<!-- TEACHING -->
-<section id="teaching">
-  <div class="wrap">
-    <div class="reveal"><div class="eyebrow">04 · Lecture Areas</div>
-      <h2 class="section-title">강의 가능한 영역</h2>
-      <p class="section-sub">기업·공공기관 출강 및 사내 교육 요청이 가능한 기술 영역입니다. 대상과 수준에 맞게 커리큘럼을 조정하여 진행합니다.</p>
-    </div>
-    <div class="teach-grid">
-      <div class="teach-card reveal">
-        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/><path d="M9 17c1 1 5 1 6 0"/></svg></div>
-          <div><div class="teach-title">생성형 AI · Microsoft AI</div><div class="teach-num">// TRACK_01</div></div>
-        </div>
-        <ul class="teach-list">
-          <li>GitHub Copilot · Agent Mode 실습</li>
-          <li>Azure OpenAI Service 활용</li>
-          <li>프롬프트 엔지니어링</li>
-          <li>AI-900 Azure AI Fundamentals 대비</li>
-          <li>업무 자동화 · Copilot Studio</li>
-        </ul>
-      </div>
-      <div class="teach-card reveal" style="transition-delay:.05s">
-        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
-          <div><div class="teach-title">Microsoft Azure</div><div class="teach-num">// TRACK_02</div></div>
-        </div>
-        <ul class="teach-list">
-          <li>AZ-104 Azure Administrator 대비</li>
-          <li>Azure 인프라 설계 · 운영</li>
-          <li>IAM · 네트워킹 · 스토리지 심화</li>
-          <li>Bicep / Terraform 기반 IaC</li>
-          <li>비용 최적화 · 모니터링 · 거버넌스</li>
-        </ul>
-      </div>
-      <div class="teach-card reveal" style="transition-delay:.1s">
-        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-          <div><div class="teach-title">Kubernetes · Container · DevOps</div><div class="teach-num">// TRACK_03</div></div>
-        </div>
-        <ul class="teach-list">
-          <li>CKA · CKAD 자격증 대비</li>
-          <li>Helm · Operator · Custom Resource</li>
-          <li>ArgoCD 기반 GitOps 워크플로우</li>
-          <li>컨테이너 보안 (KCSA / KCNA)</li>
-          <li>CI/CD 파이프라인 설계 · 운영</li>
-        </ul>
-      </div>
-      <div class="teach-card reveal" style="transition-delay:.15s">
-        <div class="teach-head"><div class="teach-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-          <div><div class="teach-title">클라우드 아키텍처 설계</div><div class="teach-num">// TRACK_04</div></div>
-        </div>
-        <ul class="teach-list">
-          <li>클라우드 컴퓨팅 개념 · IaaS/PaaS/SaaS (입문~심화)</li>
-          <li>고가용성 · 확장성 아키텍처 설계</li>
-          <li>멀티클라우드 · 하이브리드 클라우드 전략</li>
-          <li>네트워킹 · 보안 · 비용 최적화 설계</li>
-          <li>신입~실무자 대상 레벨별 커리큘럼 운영</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MICROSOFT -->
+<!-- MICROSOFT (03) -->
 <section id="microsoft">
   <div class="wrap">
-    <div class="reveal"><div class="eyebrow">05 · Microsoft Activity</div>
+    <div class="reveal">
+      <div class="eyebrow">03 · Microsoft Activity</div>
       <h2 class="section-title">Microsoft 활동</h2>
       <p class="section-sub">MCT 자격을 취득한 이후, Microsoft 에코시스템 안에서 강의·행사·자격증 교육 등 다양한 활동을 이어가고 있습니다.</p>
     </div>
@@ -1049,10 +903,11 @@
   </div>
 </section>
 
-<!-- CERTS -->
+<!-- CERTS (04) -->
 <section id="certs">
   <div class="wrap">
-    <div class="reveal"><div class="eyebrow">06 · Certifications</div>
+    <div class="reveal">
+      <div class="eyebrow">04 · Certifications</div>
       <h2 class="section-title">자격 · 인증</h2>
       <p class="section-sub">★ 표시는 핵심 강의에서 활용 중인 인증입니다.</p>
     </div>
@@ -1067,23 +922,86 @@
   </div>
 </section>
 
-<!-- CONTENT -->
+<!-- ABOUT + CAREER (05) -->
+<section id="about">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">05 · About & Career</div>
+      <h2 class="section-title">실무에서 강의로,<br>현장의 언어로 가르칩니다.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-summary reveal">
+        <div style="display:flex;flex-direction:column;gap:16px;font-family:monospace;font-size:14px;">
+          <div style="color:var(--muted2)">// 2017 — <span style="color:var(--text);font-weight:600">CLOUD OPS</span></div>
+          <div style="color:var(--muted2)">// 2022 — <span style="color:var(--text);font-weight:600">TECH TRAINER</span></div>
+          <div style="color:var(--muted2)">// 2025 — <span style="color:var(--orange);font-weight:600">FOUNDER, SKILLEAT</span></div>
+        </div>
+      </div>
+      <div class="about-detail reveal" style="transition-delay:.1s">
+        <p>NIT Services(NAVER 계열), NHN Cloud에서 클라우드 운영·교육 실무를 거치며 인프라부터 사용자 트러블슈팅까지 전 과정을 직접 경험했습니다. 현재는 <strong style="color:#fff">Skilleat 대표</strong>로 기업·공공 대상 Microsoft Azure, Kubernetes, 생성형 AI 교육을 진행하고 있으며, Microsoft AI-900(Azure AI Fundamentals) 자격증 대비 강의도 운영하고 있습니다.</p>
+        <p>2026년 1월 <strong style="color:var(--orange)">Microsoft Certified Trainer</strong>로 등록되었고, 같은 해 3월 Microsoft AI Tour Korea에서 GitHub Copilot Agent Mode Lab Proctor로 참여했습니다.</p>
+        <div class="keywords">
+          <span class="kw">Azure</span><span class="kw">Kubernetes</span><span class="kw">GenAI</span>
+          <span class="kw">DevOps</span><span class="kw">GitHub Copilot</span><span class="kw">IaC</span>
+          <span class="kw">Cloud</span><span class="kw">Architecture</span><span class="kw">Curriculum Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career subsection -->
+    <div class="subsection-eyebrow reveal">커리어 타임라인</div>
+    <div class="timeline">
+      <div class="tl-item current reveal">
+        <div class="tl-period">2025 — 현재</div>
+        <div class="tl-right">
+          <div class="tl-org">Skilleat</div>
+          <div class="tl-role">대표 / Technical Trainer</div>
+          <ul class="tl-list">
+            <li>클라우드·Kubernetes 교육 콘텐츠 기획 및 제작</li>
+            <li>기업·공공기관 대상 오프라인 교육 강의</li>
+            <li>YouTube "감테크" 채널 운영 (IT 교육 콘텐츠)</li>
+            <li>『(가제) 쿠버네티스』 서적 집필 중</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:.05s">
+        <div class="tl-period">~ 2025</div>
+        <div class="tl-right">
+          <div class="tl-org">NHN Cloud</div>
+          <div class="tl-role">Cloud Tech Trainer</div>
+          <ul class="tl-list">
+            <li>기업·공공기관 대상 클라우드 및 Kubernetes 실무 교육</li>
+            <li>NHN Cloud Education Center 월 단위 정기 교육 프로그램 운영</li>
+            <li>클라우드 엔지니어 및 실무자 대상 기술 교육 설계</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:.1s">
+        <div class="tl-period">EARLIER</div>
+        <div class="tl-right">
+          <div class="tl-org">NIT Services <span style="color:var(--muted);font-size:13px;font-weight:400">— NAVER 계열</span></div>
+          <div class="tl-role">Cloud Operations Engineer</div>
+          <ul class="tl-list">
+            <li>클라우드 인프라 운영 및 자동화 실무</li>
+            <li>서비스 안정성 확보를 위한 모니터링 및 장애 대응</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT (06) -->
 <section id="content">
   <div class="wrap">
-    <div class="reveal"><div class="eyebrow">07 · Content</div>
+    <div class="reveal">
+      <div class="eyebrow">06 · Content</div>
       <h2 class="section-title">콘텐츠 · 출판</h2>
       <p class="section-sub">강의 외에도 책, 영상, 온라인 강의로 학습자가 혼자서도 이어갈 수 있는 자료를 만들고 있습니다.</p>
     </div>
-    <div class="assets-grid">
+    <div class="assets-grid-2">
+      <!-- Card 1: YouTube -->
       <div class="asset reveal">
-        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-        <span class="asset-status upcoming">● 2026 출간 예정</span>
-        <div>
-          <div class="asset-title">쿠버네티스 입문 서적</div>
-          <div class="asset-desc">현장에서 막히는 부분만 모은 실전 가이드. CKA / CKAD 응시자를 위한 워크북 포함.</div>
-        </div>
-      </div>
-      <div class="asset reveal" style="transition-delay:.06s">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></div>
         <span class="asset-status live">● LIVE</span>
         <div>
@@ -1092,22 +1010,44 @@
         </div>
         <a href="https://www.youtube.com/@feeltechedu" target="_blank" class="asset-link">채널 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
-      <div class="asset reveal" style="transition-delay:.12s">
+      <!-- Card 2: 쿠버네티스 10일 완주 세트 -->
+      <div class="asset reveal" style="transition-delay:.06s">
+        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <span class="asset-status live">● 판매 중</span>
+        <div>
+          <div class="asset-title">쿠버네티스 10일 완주 세트</div>
+          <div class="asset-desc">입문부터 CKA/CKAD 대비까지, 10일 커리큘럼으로 구성된 실전 학습 패키지.</div>
+        </div>
+        <a href="https://skilleat.com" target="_blank" class="asset-link">바로 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+      </div>
+      <!-- Card 3: Docker Essentials -->
+      <div class="asset reveal" style="transition-delay:.09s">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <span class="asset-status live">● 판매 중</span>
+        <div>
+          <div class="asset-title">Docker Essentials</div>
+          <div class="asset-desc">컨테이너 개념부터 실무 운영까지, 빠르게 핵심을 잡는 Docker 입문 강의.</div>
+        </div>
+        <a href="https://skilleat.com" target="_blank" class="asset-link">바로 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+      </div>
+      <!-- Card 4: 쿠버네티스 서적 + 인프런 강의 -->
+      <div class="asset reveal" style="transition-delay:.12s">
+        <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <span class="asset-status preparing">● 준비 중</span>
         <div>
-          <div class="asset-title">인프런 강의</div>
-          <div class="asset-desc">Azure 입문 / Kubernetes 실전 / 생성형 AI 활용 — 단계별 트랙으로 순차 오픈 예정.</div>
+          <div class="asset-title">쿠버네티스 서적 + 인프런 강의</div>
+          <div class="asset-desc">현장에서 막히는 부분만 모은 실전 가이드 서적 (2026 출간 예정) + Azure 입문 / Kubernetes 실전 / 생성형 AI 활용 인프런 강의 순차 오픈 예정.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PHILOSOPHY -->
+<!-- PHILOSOPHY (07) -->
 <section id="philosophy">
   <div class="wrap">
-    <div class="reveal"><div class="eyebrow">07 · Teaching Philosophy</div>
+    <div class="reveal">
+      <div class="eyebrow">07 · Teaching Philosophy</div>
       <h2 class="section-title">어떻게 가르치는가</h2>
       <p class="section-sub">강의를 만들 때 항상 지키려 하는 4가지 원칙입니다.</p>
     </div>
@@ -1136,6 +1076,30 @@
   </div>
 </section>
 
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <div class="wrap">
+    <div class="footer-cta-inner reveal">
+      <h2>우리 팀에 맞는 교육이<br>필요하신가요?</h2>
+      <p>대상과 수준에 맞춰 커리큘럼을 조정해 진행합니다.<br>과정 상담 · 제안서 요청 환영합니다.</p>
+      <div class="footer-cta-actions">
+        <a class="cta-btn-lg" href="mailto:nr@skilleat.com?subject=[교육 문의] ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          교육 문의하기
+        </a>
+        <a class="cta-btn-ghost" href="https://www.youtube.com/@feeltechedu" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8 0 12 0 12s0 4 .5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 16 24 12 24 12s0-4-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+          YouTube · 감테크
+        </a>
+        <a class="cta-btn-ghost" href="https://www.linkedin.com/in/nuri-kim-441a5312b/" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3v9zM6.5 8.3a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.7c0-1.1 0-2.5-1.5-2.5S13 13 13 14.2V19h-3v-9h2.9v1.3h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="wrap footer-inner">
@@ -1144,13 +1108,110 @@
 </footer>
 
 <script>
-  // Reveal on scroll
+  // ==================== DATA ====================
+  const TRACKS = [
+    {
+      id: 'TRACK_01',
+      title: '생성형 AI · Microsoft AI',
+      iconPath: 'M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z',
+      iconExtra: '<circle cx="9" cy="13" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/><path d="M9 17c1 1 5 1 6 0"/>',
+      items: ['GitHub Copilot · Agent Mode 실습','Azure OpenAI Service 활용','프롬프트 엔지니어링','AI-900 Azure AI Fundamentals 대비','업무 자동화 · Copilot Studio'],
+      meta: '비개발 실무자~개발자 · 반일 특강~2일 과정 · 출강/온라인'
+    },
+    {
+      id: 'TRACK_02',
+      title: 'Microsoft Azure',
+      iconPath: 'M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z',
+      iconExtra: '',
+      items: ['AZ-104 Azure Administrator 대비','Azure 인프라 설계 · 운영','IAM · 네트워킹 · 스토리지 심화','Bicep / Terraform 기반 IaC','비용 최적화 · 모니터링 · 거버넌스'],
+      meta: '신입~운영 실무자 · 1일~4일 과정 · 출강/온라인'
+    },
+    {
+      id: 'TRACK_03',
+      title: 'Kubernetes · Container · DevOps',
+      iconPath: 'M12 2L2 7l10 5 10-5-10-5z',
+      iconExtra: '<path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>',
+      items: ['CKA · CKAD 자격증 대비','Helm · Operator · Custom Resource','ArgoCD 기반 GitOps 워크플로우','컨테이너 보안 (KCSA / KCNA)','CI/CD 파이프라인 설계 · 운영'],
+      meta: '신입~실무자 · 1일 특강~9일 과정 · 출강/온라인'
+    },
+    {
+      id: 'TRACK_04',
+      title: '클라우드 아키텍처 설계',
+      iconPath: 'M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z',
+      iconExtra: '',
+      items: ['클라우드 컴퓨팅 개념 · IaaS/PaaS/SaaS (입문~심화)','고가용성 · 확장성 아키텍처 설계','멀티클라우드 · 하이브리드 클라우드 전략','네트워킹 · 보안 · 비용 최적화 설계','신입~실무자 대상 레벨별 커리큘럼 운영'],
+      meta: '신입~실무자 · 1일~4일 과정 · 출강/온라인'
+    }
+  ];
+
+  const HISTORY_LIST = [
+    { sector: '공공기관',    course: 'AI-900 (Azure AI Fundamentals) 자격증 대비 과정' },
+    { sector: '공공기관',    course: '클라우드 인프라 구조 · 컨테이너 기술 개요' },
+    { sector: '금융권',      course: '클라우드 인프라 이해 교육' },
+    { sector: '금융 계열 IT', course: '클라우드 엔지니어 양성과정 (인프라 · 네트워크 · Linux · Python · Docker · K8s)' },
+    { sector: 'IT 교육기관', course: '컨테이너 기반 아키텍처 · CI/CD 자동화 — 4개 과정 커리큘럼 설계 및 강의' },
+    { sector: 'IT 교육기관', course: 'Docker & Kubernetes 실무 교육' },
+    { sector: 'IT 교육기관', course: '멀티캠퍼스 정기 강의 (Azure / Kubernetes / 생성형 AI)' },
+    { sector: 'MSP 파트너',  course: 'NHN Cloud 서비스 운영 인프라 교육' },
+    { sector: 'MSP 파트너',  course: '클라우드 인프라 운영 · DevOps 기초' },
+    { sector: '지역 실무자', course: '가상화 · 클라우드 · 컨테이너 기술 교육' },
+    { sector: '의료기관',    course: 'KMI 한국의학연구소 생성형 AI 활용 강의' },
+    { sector: '파트너사',    course: 'GitHub Copilot 실습 교육 — Microsoft 파트너사 보조강사 (2026.05)' },
+    { sector: '글로벌 기업', course: 'CoorsTek Korea — Microsoft 공식 AI 교육 MS-4018/4019/4022 (2026.07)' },
+  ];
+  // ==============================================
+
+  // Reveal on scroll — declare io FIRST so renderTracks() can use it
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Render lecture area tracks
+  function renderTracks() {
+    const container = document.getElementById('teach-grid');
+    if (!container) return;
+    container.innerHTML = TRACKS.map((t, i) => `
+      <div class="teach-card reveal" style="${i > 0 ? 'transition-delay:' + (i * 0.05) + 's' : ''}">
+        <div class="teach-head">
+          <div class="teach-emoji">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="${t.iconPath}"/>${t.iconExtra}
+            </svg>
+          </div>
+          <div>
+            <div class="teach-title">${t.title}</div>
+            <div class="teach-num">// ${t.id}</div>
+          </div>
+        </div>
+        <ul class="teach-list">
+          ${t.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+        <div class="track-meta-bar">${t.meta}</div>
+      </div>
+    `).join('');
+    // re-observe newly created .reveal elements
+    container.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
+  // Render compact history list
+  function renderHistList() {
+    const container = document.getElementById('hist-list');
+    if (!container) return;
+    const n = HISTORY_LIST.length;
+    container.innerHTML = HISTORY_LIST.map((item, i) => {
+      const isLast = i === n - 1;
+      return `<div class="hist-item${isLast ? ' hist-last' : ''}" title="${item.course}">
+        <span class="hist-sector">${item.sector}</span>
+        <span class="hist-course">${item.course}</span>
+      </div>`;
+    }).join('');
+  }
+
+  renderTracks();
+  renderHistList();
 
   // Stat counter
   const counters = document.querySelectorAll('[data-count]');
@@ -1172,18 +1233,6 @@
     });
   }, { threshold: 0.5 });
   counters.forEach(c => cio.observe(c));
-
-  // Teaching history toggle
-  function toggleHistory() {
-    const detail = document.getElementById('history-detail');
-    const text = document.getElementById('history-toggle-text');
-    const arrow = document.getElementById('history-arrow');
-    const open = detail.style.display === 'none';
-    detail.style.display = open ? 'block' : 'none';
-    text.textContent = open ? '강의 이력 접기' : '강의 이력 상세 보기';
-    arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
-  }
-  window.toggleHistory = toggleHistory;
 
   // Copy email
   document.querySelectorAll('[data-copy]').forEach(btn => {
