@@ -10,25 +10,30 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ── COLOR TOKENS ── */
     :root {
-      --bg:      #111111;
-      --bg2:     #181818;
-      --bg3:     #1f1f1f;
-      --border:  #2a2a2a;
-      --border2: #333333;
-      --orange:  #FF6B2B;
-      --orange2: #FF8C42;
-      --text:    #F0F0F0;
-      --muted:   #888888;
-      --muted2:  #555555;
-      --white:   #FFFFFF;
+      --bg:            #FFFFFF;
+      --bg-alt:        #F6F7F9;
+      --card:          #FFFFFF;
+      --border:        #E4E6EA;
+      --border-strong: #D5D8DE;
+
+      --text-heading:  #1A1A35;
+      --text-body:     #4A4E5A;
+      --text-muted:    #8A8F98;
+
+      --accent:        #E04E12;
+      --accent-hover:  #C4430E;
+      --accent-tint:   #FDEEE7;
+
+      --navy:          #1A1A35;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
-      color: var(--text);
+      color: var(--text-body);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
@@ -46,9 +51,15 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(17,17,17,0.85);
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: background .25s, border-color .25s, box-shadow .25s;
+    }
+    nav.nav-scrolled {
+      background: rgba(255,255,255,0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(26,26,53,0.07);
     }
     .nav-inner {
       max-width: 1100px;
@@ -62,33 +73,39 @@
     .nav-brand {
       display: flex; align-items: center; gap: 10px;
       font-weight: 700; font-size: 15px;
+      color: #fff;
+      transition: color .25s;
     }
+    nav.nav-scrolled .nav-brand { color: var(--text-heading); }
     .nav-mark {
       width: 30px; height: 30px;
-      background: var(--orange);
+      background: var(--accent);
       border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
       font-weight: 900; font-size: 15px; color: #fff;
     }
+    .nav-brand span { color: rgba(255,255,255,0.5); font-weight: 400; margin-left: 6px; transition: color .25s; }
+    nav.nav-scrolled .nav-brand span { color: var(--text-muted); }
     .nav-links {
       display: flex; gap: 28px;
-      font-size: 13px; font-weight: 500; color: var(--muted);
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      transition: color .25s;
     }
-    .nav-links a:hover { color: var(--text); transition: color .2s; }
-    .nav-cta {
-      background: var(--orange);
-      color: #fff;
-      padding: 7px 18px;
-      border-radius: 8px;
-      font-size: 13px; font-weight: 600;
-      transition: opacity .2s;
-    }
-    .nav-cta:hover { opacity: .85; }
+    nav.nav-scrolled .nav-links { color: var(--text-muted); }
+    .nav-links a { transition: color .2s; }
+    .nav-links a:hover { color: #fff; }
+    nav.nav-scrolled .nav-links a:hover { color: var(--text-heading); }
 
-    /* ── HERO ── */
+    /* ── HERO (Navy dark block) ── */
+    .hero-section {
+      background: var(--navy);
+      padding: 0;
+      border: none;
+    }
     .hero {
       display: flex; align-items: center;
-      padding: 84px 40px 40px;
+      padding: 84px 40px 56px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -100,13 +117,12 @@
       width: 100%;
     }
 
-    /* Left */
     .hero-left {}
     .status-pill {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,107,43,0.1);
-      border: 1px solid rgba(255,107,43,0.25);
-      color: var(--orange2);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.75);
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px; font-weight: 600; letter-spacing: .5px;
@@ -114,7 +130,7 @@
     }
     .status-dot {
       width: 7px; height: 7px;
-      background: var(--orange);
+      background: var(--accent);
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
@@ -125,7 +141,7 @@
 
     .hero-name-kr {
       font-size: 13px; font-weight: 600; letter-spacing: 3px;
-      color: var(--muted); text-transform: uppercase;
+      color: rgba(255,255,255,0.45); text-transform: uppercase;
       margin-bottom: 8px;
     }
     .hero-name {
@@ -134,59 +150,60 @@
       line-height: 1;
       letter-spacing: -2px;
       white-space: nowrap;
-      color: var(--white);
+      color: #FFFFFF;
       margin-bottom: 14px;
     }
-    .hero-name span { color: var(--orange); }
 
     .hero-tagline {
       font-size: clamp(16px, 2vw, 20px);
-      color: var(--muted);
+      color: #C9CDD4;
       font-weight: 500;
       margin-bottom: 12px;
       line-height: 1.5;
     }
-    .hero-tagline strong { color: var(--text); }
+    .hero-tagline strong { color: #fff; }
 
     .hero-sub {
       display: flex; flex-wrap: wrap; gap: 6px 16px;
-      font-size: 13px; color: var(--muted2);
+      font-size: 13px; color: rgba(255,255,255,0.4);
       margin-bottom: 20px;
     }
     .hero-sub span { display: flex; align-items: center; gap: 6px; }
-    .hero-sub span::before { content:'·'; color: var(--orange); }
+    .hero-sub span::before { content:'·'; color: rgba(255,255,255,0.3); }
 
     .contact-bar {
       display: flex; flex-wrap: wrap; gap: 10px;
     }
+
+    /* Hero secondary chips — transparent/glass style */
     .chip {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      color: var(--muted);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #C9CDD4;
       padding: 9px 16px;
       border-radius: 10px;
       font-size: 13px; font-weight: 500;
       transition: all .2s; cursor: pointer;
     }
-    .chip:hover { border-color: var(--orange); color: var(--text); }
+    .chip:hover { background: rgba(255,255,255,0.14); color: #fff; border-color: rgba(255,255,255,0.35); }
     .chip svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .chip.copied { color: var(--orange); border-color: var(--orange); }
+    .chip.copied { color: var(--accent); border-color: var(--accent); background: rgba(224,78,18,0.1); }
 
-    /* Hero CTA chip */
+    /* Hero primary CTA */
     .chip-primary {
-      background: var(--orange); color: #fff;
-      border-color: var(--orange); font-weight: 700;
+      background: var(--accent); color: #fff;
+      border-color: var(--accent); font-weight: 700;
       font-size: 14px; padding: 11px 22px;
       width: 100%; justify-content: center;
     }
-    .chip-primary:hover { opacity: .85; color: #fff; border-color: var(--orange); }
+    .chip-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; opacity: 1; }
 
-    /* Right — Photo Card */
+    /* Right — Photo Card (on Navy bg) */
     .hero-right { position: relative; }
     .photo-card {
-      background: var(--bg2);
-      border: 1px solid var(--border2);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 24px;
       overflow: hidden;
       position: relative;
@@ -199,59 +216,54 @@
     }
     .photo-card-badge {
       position: absolute; top: 16px; left: 16px;
-      background: rgba(17,17,17,0.85);
+      background: rgba(26,26,53,0.75);
       backdrop-filter: blur(8px);
-      border: 1px solid var(--border2);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: 10px;
       padding: 8px 14px;
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
-      color: var(--muted);
+      color: rgba(255,255,255,0.6);
     }
-    .photo-card-badge span { color: var(--orange); }
+    .photo-card-badge span { color: var(--accent); }
     .photo-card-bottom {
       padding: 20px 20px 22px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
     .photo-card-name {
-      font-weight: 700; font-size: 16px; color: var(--white);
+      font-weight: 700; font-size: 16px; color: #fff;
     }
     .photo-card-role {
-      font-size: 12px; color: var(--muted); margin-top: 2px;
+      font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px;
     }
 
-    /* Decorative dots */
+    /* Decorative glow */
     .hero-right::before {
       content: '';
       position: absolute; top: -30px; right: -30px;
       width: 180px; height: 180px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,107,43,0.15) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-right::after {
-      content: '';
-      position: absolute; bottom: -20px; left: -20px;
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(224,78,18,0.18) 0%, transparent 70%);
       pointer-events: none;
     }
 
     /* ── SECTION COMMON ── */
-    section { padding: 56px 0; border-top: 1px solid var(--border); }
+    section { padding: 56px 0; border-top: none; }
+    .sect-alt { background: var(--bg-alt); }
+    .sect-navy { background: var(--navy); }
+
     .eyebrow {
       font-size: 11px; font-weight: 700; letter-spacing: 3px;
-      color: var(--orange); text-transform: uppercase;
+      color: var(--text-muted); text-transform: uppercase;
       margin-bottom: 12px;
     }
     .section-title {
       font-size: clamp(28px, 3.5vw, 40px);
       font-weight: 800; letter-spacing: -1px;
-      color: var(--white); line-height: 1.2;
+      color: var(--text-heading); line-height: 1.2;
       margin-bottom: 16px;
     }
     .section-sub {
-      font-size: 15px; color: var(--muted); max-width: 580px;
+      font-size: 15px; color: var(--text-muted); max-width: 580px;
       line-height: 1.7;
     }
 
@@ -264,31 +276,31 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      margin-top: 0;
     }
     .stat-card {
-      background: var(--bg2);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px 24px;
       position: relative; overflow: hidden;
+      transition: box-shadow .2s;
     }
+    .stat-card:hover { box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
     .stat-card::before {
       content: '';
       position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-      background: var(--orange);
+      background: var(--accent);
       opacity: 0;
       transition: opacity .3s;
     }
     .stat-card:hover::before { opacity: 1; }
     .stat-num {
       font-size: 40px; font-weight: 900; letter-spacing: -2px;
-      color: var(--white); line-height: 1;
+      color: var(--text-heading); line-height: 1;
       margin-bottom: 8px;
     }
-    .stat-num .orange { color: var(--orange); }
-    .stat-label { font-size: 14px; color: var(--muted); font-weight: 500; }
-    .stat-tag { font-size: 11px; color: var(--muted2); font-family: monospace; margin-top: 8px; display: block; }
+    .stat-label { font-size: 14px; color: var(--text-body); font-weight: 500; }
+    .stat-tag { font-size: 11px; color: var(--text-muted); font-family: monospace; margin-top: 8px; display: block; }
 
     /* ── ABOUT ── */
     .about-grid {
@@ -299,26 +311,17 @@
       align-items: start;
     }
     .about-summary {
-      font-size: 17px; line-height: 1.8; color: var(--muted);
-    }
-    .pill {
-      display: inline-block;
-      background: rgba(255,107,43,0.1);
-      border: 1px solid rgba(255,107,43,0.2);
-      color: var(--orange2);
-      padding: 2px 10px;
-      border-radius: 6px;
-      font-size: 14px; font-weight: 600;
+      font-size: 17px; line-height: 1.8; color: var(--text-muted);
     }
     .about-detail p {
-      font-size: 15px; line-height: 1.8; color: var(--muted);
+      font-size: 15px; line-height: 1.8; color: var(--text-body);
       margin-bottom: 16px;
     }
     .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .kw {
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      color: var(--muted);
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      color: var(--text-body);
       padding: 4px 12px;
       border-radius: 6px;
       font-size: 12px; font-weight: 600; letter-spacing: .3px;
@@ -326,8 +329,8 @@
 
     /* ── MICROSOFT ── */
     .ms-highlight {
-      background: var(--bg2);
-      border: 1px solid var(--border2);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px;
       margin-top: 48px;
@@ -337,38 +340,39 @@
       margin-bottom: 28px; padding-bottom: 24px;
       border-bottom: 1px solid var(--border);
     }
-    .ms-head h3 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .ms-sub { font-size: 13px; color: var(--muted); }
+    .ms-head h3 { font-size: 20px; font-weight: 700; color: var(--text-heading); margin-bottom: 4px; }
+    .ms-sub { font-size: 13px; color: var(--text-muted); }
     .ms-logo-block { display: flex; align-items: center; gap: 12px; }
     .ms-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
-    .ms-tile { width: 14px; height: 14px; border-radius: 2px; background: var(--orange); opacity: .7; }
-    .ms-tile:nth-child(2) { opacity: .5; }
-    .ms-tile:nth-child(3) { opacity: .4; }
+    .ms-tile { width: 14px; height: 14px; border-radius: 2px; background: var(--navy); opacity: .7; }
+    .ms-tile:nth-child(2) { opacity: .4; }
+    .ms-tile:nth-child(3) { opacity: .3; }
     .ms-tile:nth-child(4) { opacity: .9; }
-    .ml-text { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
-    .ml-sub { display: block; font-size: 9px; color: var(--muted2); letter-spacing: .5px; margin-top: 2px; }
+    .ml-text { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; }
+    .ml-sub { display: block; font-size: 9px; color: var(--text-muted); letter-spacing: .5px; margin-top: 2px; }
     .ms-list { display: flex; flex-direction: column; gap: 16px; }
     .ms-item {
       display: flex; align-items: flex-start; gap: 16px;
       padding: 16px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
+      background: var(--card);
     }
-    .ms-item.featured { border-color: rgba(255,107,43,0.2); background: rgba(255,107,43,0.03); }
-    .ms-item:hover { border-color: var(--orange); }
+    .ms-item.featured { border-color: var(--border-strong); }
+    .ms-item:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
     .ms-icon {
       width: 36px; height: 36px; flex-shrink: 0;
-      background: rgba(255,107,43,0.1);
+      background: var(--accent-tint);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--orange);
+      color: var(--accent-hover);
     }
     .ms-icon svg { width: 16px; height: 16px; }
     .ms-text { flex: 1; }
-    .ms-title { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
-    .ms-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
-    .ms-date { font-size: 12px; color: var(--orange); font-weight: 600; white-space: nowrap; }
+    .ms-title { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px; }
+    .ms-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .ms-date { font-size: 12px; color: var(--text-muted); font-weight: 600; white-space: nowrap; font-family: monospace; }
 
     /* ── TEACHING ── */
     .teach-grid {
@@ -378,34 +382,39 @@
       margin-top: 48px;
     }
     .teach-card {
-      background: var(--bg2);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .teach-card:hover { border-color: var(--orange); }
+    .teach-card:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
     .teach-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-    .teach-emoji { width: 40px; height: 40px; flex-shrink: 0; background: rgba(255,107,43,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--orange); }
+    .teach-emoji {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--accent-tint); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-hover);
+    }
     .teach-emoji svg { width: 20px; height: 20px; }
-    .teach-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .teach-num { font-size: 11px; color: var(--orange); font-family: monospace; }
+    .teach-title { font-size: 15px; font-weight: 700; color: var(--text-heading); margin-bottom: 4px; }
+    .teach-num { font-size: 11px; color: var(--text-muted); font-family: monospace; }
     .teach-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
     .teach-list li {
-      font-size: 14px; color: var(--muted);
+      font-size: 14px; color: var(--text-body);
       padding-left: 16px; position: relative; line-height: 1.5;
     }
     .teach-list li::before {
       content: '›';
       position: absolute; left: 0;
-      color: var(--orange); font-weight: 700;
+      color: var(--text-muted); font-weight: 700;
     }
 
     /* Track meta bar */
     .track-meta-bar {
       margin-top: 16px; padding-top: 14px;
       border-top: 1px solid var(--border);
-      font-size: 12px; color: var(--muted2); font-family: monospace;
+      font-size: 12px; color: var(--text-muted); font-family: monospace;
     }
 
     /* ── CERTS ── */
@@ -416,19 +425,23 @@
       margin-top: 48px;
     }
     .cert {
-      background: var(--bg2);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 20px 22px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .cert.featured { border-color: rgba(255,107,43,0.3); }
-    .cert:hover { border-color: var(--orange); }
+    .cert.featured { border-color: var(--border-strong); }
+    .cert:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
     .cert-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .cert-issuer { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--muted2); }
-    .cert-star { color: var(--orange); font-size: 14px; }
-    .cert-code { font-size: 22px; font-weight: 900; color: var(--white); letter-spacing: -1px; margin-bottom: 4px; }
-    .cert-name { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .cert-issuer { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--text-muted); }
+    .cert-star {
+      font-size: 10px; font-weight: 700; letter-spacing: .5px;
+      background: var(--accent-tint); color: var(--accent-hover);
+      padding: 2px 8px; border-radius: 4px;
+    }
+    .cert-code { font-size: 22px; font-weight: 900; color: var(--text-heading); letter-spacing: -1px; margin-bottom: 4px; }
+    .cert-name { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 
     /* ── CAREER ── */
     .timeline { margin-top: 48px; display: flex; flex-direction: column; gap: 0; }
@@ -441,55 +454,50 @@
       position: relative;
     }
     .tl-item:last-child { border-bottom: none; }
-    .tl-period { font-size: 12px; font-weight: 600; color: var(--muted2); font-family: monospace; padding-top: 4px; }
-    .tl-item.current .tl-period { color: var(--orange); }
+    .tl-period { font-size: 12px; font-weight: 600; color: var(--text-muted); font-family: monospace; padding-top: 4px; }
     .tl-right {}
-    .tl-org { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .tl-role { font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 8px; }
-    .tl-detail { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .tl-org { font-size: 18px; font-weight: 700; color: var(--text-heading); margin-bottom: 4px; }
+    .tl-role { font-size: 13px; color: var(--text-heading); font-weight: 600; margin-bottom: 8px; }
     .tl-list { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-    .tl-list li { font-size: 14px; color: var(--muted); line-height: 1.6; padding-left: 14px; position: relative; }
-    .tl-list li::before { content: '›'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+    .tl-list li { font-size: 14px; color: var(--text-body); line-height: 1.6; padding-left: 14px; position: relative; }
+    .tl-list li::before { content: '›'; position: absolute; left: 0; color: var(--text-muted); font-weight: 700; }
 
     /* ── CONTENT ── */
-    .assets-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 48px;
+    .assets-grid-2 {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 48px;
     }
     .asset {
-      background: var(--bg2);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
       display: flex; flex-direction: column; gap: 12px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .asset:hover { border-color: var(--orange); }
-    .asset-emoji { width: 40px; height: 40px; flex-shrink: 0; background: rgba(255,107,43,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--orange); }
+    .asset:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
+    .asset-emoji {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--accent-tint); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-hover);
+    }
     .asset-emoji svg { width: 20px; height: 20px; }
     .asset-status {
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
       padding: 3px 10px; border-radius: 6px; display: inline-block;
     }
-    .asset-status.live { background: rgba(255,107,43,0.1); color: var(--orange); }
-    .asset-status.upcoming { background: rgba(100,100,100,0.15); color: var(--muted); }
-    .asset-status.preparing { background: rgba(100,100,100,0.15); color: var(--muted2); }
-    .asset-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .asset-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .asset-status.live { background: var(--accent-tint); color: var(--accent-hover); }
+    .asset-status.upcoming { background: var(--bg-alt); color: var(--text-muted); }
+    .asset-status.preparing { background: var(--bg-alt); color: var(--text-muted); }
+    .asset-title { font-size: 16px; font-weight: 700; color: var(--text-heading); margin-bottom: 4px; }
+    .asset-desc { font-size: 13px; color: var(--text-body); line-height: 1.6; }
     .asset-link {
       display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; font-weight: 600; color: var(--orange);
+      font-size: 13px; font-weight: 600; color: var(--accent-hover);
       margin-top: auto;
     }
     .asset-link svg { width: 13px; height: 13px; }
-
-    /* Content grid 2x2 */
-    .assets-grid-2 {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 16px; margin-top: 48px;
-    }
 
     /* ── PHILOSOPHY ── */
     .philo-grid {
@@ -499,39 +507,30 @@
       margin-top: 48px;
     }
     .philo {
-      background: var(--bg2);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .philo:hover { border-color: var(--orange); }
-    .philo-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--orange); margin-bottom: 10px; font-family: monospace; }
-    .philo-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
-    .philo-body { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .philo:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(26,26,53,0.06); }
+    .philo-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 10px; font-family: monospace; }
+    .philo-title { font-size: 18px; font-weight: 700; color: var(--text-heading); margin-bottom: 10px; }
+    .philo-body { font-size: 14px; color: var(--text-body); line-height: 1.8; }
 
     /* ── HISTORY ── */
     .history-badges { display: flex; flex-wrap: wrap; gap: 10px; }
     .h-badge {
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-body);
       padding: 6px 16px;
       border-radius: 20px;
       font-size: 13px; font-weight: 500;
     }
     .h-badge em {
-      font-style: normal; color: var(--orange);
+      font-style: normal; color: var(--accent-hover);
       font-size: 11px; font-weight: 700; margin-left: 4px;
-    }
-    .h-badge-sm {
-      background: rgba(255,107,43,0.08);
-      border: 1px solid rgba(255,107,43,0.2);
-      color: var(--orange2);
-      padding: 3px 10px;
-      border-radius: 6px;
-      font-size: 12px; font-weight: 600;
-      white-space: nowrap;
     }
 
     /* Featured history cards */
@@ -540,21 +539,21 @@
       gap: 16px; margin-top: 24px;
     }
     .feat-card {
-      background: var(--bg2);
-      border: 1px solid rgba(255,107,43,0.3);
+      background: var(--card);
+      border: 1px solid var(--border-strong);
       border-radius: 16px; padding: 24px;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
-    .feat-card:hover { border-color: var(--orange); }
+    .feat-card:hover { box-shadow: 0 2px 8px rgba(26,26,53,0.08); }
     .feat-label {
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
-      color: var(--orange); margin-bottom: 10px;
+      color: var(--accent-hover); margin-bottom: 10px;
     }
     .feat-title {
-      font-size: 16px; font-weight: 700; color: var(--white);
+      font-size: 16px; font-weight: 700; color: var(--text-heading);
       margin-bottom: 8px; line-height: 1.3;
     }
-    .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .feat-desc { font-size: 13px; color: var(--text-body); line-height: 1.6; }
 
     /* Compact history list */
     .hist-list {
@@ -562,7 +561,7 @@
       margin-top: 24px;
       border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden;
-      background: var(--bg2);
+      background: var(--card);
     }
     .hist-item {
       display: flex; align-items: baseline; gap: 12px;
@@ -575,23 +574,23 @@
     .hist-sector {
       flex-shrink: 0; width: 80px;
       font-size: 11px; font-weight: 700;
-      color: var(--muted2); letter-spacing: .3px;
+      color: var(--text-muted); letter-spacing: .3px;
     }
     .hist-course {
-      flex: 1; font-size: 13px; color: var(--muted);
+      flex: 1; font-size: 13px; color: var(--text-body);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
     /* Subsection label */
     .subsection-eyebrow {
       font-size: 11px; font-weight: 700; letter-spacing: 2px;
-      color: var(--muted2); text-transform: uppercase;
+      color: var(--text-muted); text-transform: uppercase;
       margin-top: 40px; margin-bottom: 12px;
     }
 
-    /* Footer CTA section */
+    /* ── FOOTER CTA (Navy accent block) ── */
     .footer-cta {
-      border-top: 1px solid var(--border);
+      background: var(--navy);
       padding: 72px 0;
     }
     .footer-cta-inner {
@@ -599,39 +598,39 @@
     }
     .footer-cta-inner h2 {
       font-size: clamp(22px, 3vw, 34px); font-weight: 800;
-      color: var(--white); letter-spacing: -1px;
+      color: #fff; letter-spacing: -1px;
       margin-bottom: 14px; line-height: 1.2;
     }
     .footer-cta-inner p {
-      font-size: 15px; color: var(--muted);
+      font-size: 15px; color: #C9CDD4;
       line-height: 1.7; margin-bottom: 32px;
     }
     .footer-cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
     .cta-btn-lg {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--orange); color: #fff;
+      background: var(--accent); color: #fff;
       padding: 13px 28px; border-radius: 10px;
-      font-size: 15px; font-weight: 700; transition: opacity .2s;
+      font-size: 15px; font-weight: 700; transition: background .2s;
     }
-    .cta-btn-lg:hover { opacity: .85; }
+    .cta-btn-lg:hover { background: var(--accent-hover); }
     .cta-btn-ghost {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--bg3); border: 1px solid var(--border2);
-      color: var(--text); padding: 13px 22px; border-radius: 10px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.22);
+      color: #C9CDD4; padding: 13px 22px; border-radius: 10px;
       font-size: 14px; font-weight: 600; transition: all .2s;
     }
-    .cta-btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+    .cta-btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
 
     /* ── FOOTER ── */
     footer {
+      background: var(--bg);
       border-top: 1px solid var(--border);
       padding: 28px 0;
     }
     .footer-inner {
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 12px; color: var(--muted2);
+      font-size: 12px; color: var(--text-muted);
     }
-    .footer-meta { font-family: monospace; letter-spacing: 1px; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
@@ -642,7 +641,6 @@
       .about-grid { grid-template-columns: 1fr; }
       .teach-grid { grid-template-columns: 1fr; }
       .cert-grid { grid-template-columns: 1fr 1fr; }
-      .assets-grid { grid-template-columns: 1fr; }
       .philo-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
@@ -654,6 +652,7 @@
     }
     @media (max-width: 600px) {
       .wrap { padding: 0 20px; }
+      .hero { padding: 80px 20px 48px; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .cert-grid { grid-template-columns: 1fr; }
       .tl-item { grid-template-columns: 1fr; gap: 4px; }
@@ -665,11 +664,11 @@
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="navbar">
   <div class="nav-inner">
     <div class="nav-brand">
       <div class="nav-mark">N</div>
-      김누리 <span style="color:var(--muted);font-weight:400;margin-left:6px">· 감테크</span>
+      김누리 <span>· 감테크</span>
     </div>
     <div class="nav-links">
       <a href="#teaching">Teaching</a>
@@ -684,7 +683,7 @@
 </nav>
 
 <!-- HERO -->
-<section style="border:none;padding:0">
+<section class="hero-section">
   <div class="hero">
     <div class="hero-grid">
 
@@ -694,10 +693,10 @@
           AVAILABLE FOR 2026 Q3 — Q4 출강
         </div>
         <div class="hero-name-kr">Kim Nuri</div>
-        <h1 class="hero-name">Nuri <span>Kim</span></h1>
+        <h1 class="hero-name">Nuri Kim</h1>
         <p class="hero-tagline">
           감을 잡으면, 혼자서도 끝까지 갑니다.<br>
-          <span style="font-size:0.85em;color:var(--muted)">재미있고 쓸모 있는 교육으로 — 결국 스스로 해낼 수 있는 힘을 만들어드립니다.</span>
+          <span style="font-size:0.85em;color:rgba(255,255,255,0.5)">재미있고 쓸모 있는 교육으로 — 결국 스스로 해낼 수 있는 힘을 만들어드립니다.</span>
         </p>
         <div class="hero-sub">
           <span>Cloud</span>
@@ -746,7 +745,7 @@
 </section>
 
 <!-- STATS -->
-<section>
+<section class="sect-alt">
   <div class="wrap">
     <div class="stats-grid">
       <div class="stat-card reveal">
@@ -786,7 +785,7 @@
 </section>
 
 <!-- HISTORY (02) -->
-<section id="history">
+<section id="history" class="sect-alt">
   <div class="wrap">
     <div class="reveal">
       <div class="eyebrow">02 · Teaching History</div>
@@ -794,7 +793,6 @@
       <p class="section-sub">다양한 업종·규모의 기업과 기관에서 강의를 진행했습니다.</p>
     </div>
 
-    <!-- Industry tags with counts -->
     <div class="history-badges reveal" style="margin-top:32px">
       <span class="h-badge">공공기관 <em>×2</em></span>
       <span class="h-badge">금융권 <em>×1</em></span>
@@ -809,7 +807,6 @@
       <span class="h-badge">파트너사 <em>×1</em></span>
     </div>
 
-    <!-- Featured cards -->
     <div class="subsection-eyebrow reveal">대표 사례</div>
     <div class="feat-grid">
       <div class="feat-card reveal">
@@ -829,7 +826,6 @@
       </div>
     </div>
 
-    <!-- Compact list (data-driven) -->
     <div class="subsection-eyebrow reveal">전체 이력</div>
     <div id="hist-list" class="hist-list reveal"></div>
   </div>
@@ -890,7 +886,7 @@
           </div>
           <div class="ms-date">2026.05~</div>
         </div>
-        <div class="ms-item passive reveal" style="transition-delay:.15s">
+        <div class="ms-item reveal" style="transition-delay:.15s">
           <div class="ms-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
           <div class="ms-text">
             <div class="ms-title">AZ-104 Azure Administrator 자격증 보유</div>
@@ -904,20 +900,20 @@
 </section>
 
 <!-- CERTS (04) -->
-<section id="certs">
+<section id="certs" class="sect-alt">
   <div class="wrap">
     <div class="reveal">
       <div class="eyebrow">04 · Certifications</div>
       <h2 class="section-title">자격 · 인증</h2>
-      <p class="section-sub">★ 표시는 핵심 강의에서 활용 중인 인증입니다.</p>
+      <p class="section-sub">핵심 표시는 현재 강의에서 활용 중인 인증입니다.</p>
     </div>
     <div class="cert-grid">
-      <div class="cert featured reveal"><div class="cert-top"><span class="cert-issuer">MICROSOFT</span><span class="cert-star">★</span></div><div class="cert-code">MCT</div><div class="cert-name">Microsoft Certified Trainer</div></div>
-      <div class="cert featured reveal" style="transition-delay:.04s"><div class="cert-top"><span class="cert-issuer">MICROSOFT</span><span class="cert-star">★</span></div><div class="cert-code">AZ-104</div><div class="cert-name">Azure Administrator Associate</div></div>
-      <div class="cert featured reveal" style="transition-delay:.08s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">★</span></div><div class="cert-code">CKA</div><div class="cert-name">Certified Kubernetes Administrator</div></div>
-      <div class="cert featured reveal" style="transition-delay:.12s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">★</span></div><div class="cert-code">CKAD</div><div class="cert-name">Certified Kubernetes Application Developer</div></div>
-      <div class="cert featured reveal" style="transition-delay:.16s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">★</span></div><div class="cert-code">KCSA</div><div class="cert-name">Kubernetes &amp; Cloud Native Security Associate</div></div>
-      <div class="cert featured reveal" style="transition-delay:.2s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">★</span></div><div class="cert-code">KCNA</div><div class="cert-name">Kubernetes &amp; Cloud Native Associate</div></div>
+      <div class="cert featured reveal"><div class="cert-top"><span class="cert-issuer">MICROSOFT</span><span class="cert-star">핵심</span></div><div class="cert-code">MCT</div><div class="cert-name">Microsoft Certified Trainer</div></div>
+      <div class="cert featured reveal" style="transition-delay:.04s"><div class="cert-top"><span class="cert-issuer">MICROSOFT</span><span class="cert-star">핵심</span></div><div class="cert-code">AZ-104</div><div class="cert-name">Azure Administrator Associate</div></div>
+      <div class="cert featured reveal" style="transition-delay:.08s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">핵심</span></div><div class="cert-code">CKA</div><div class="cert-name">Certified Kubernetes Administrator</div></div>
+      <div class="cert featured reveal" style="transition-delay:.12s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">핵심</span></div><div class="cert-code">CKAD</div><div class="cert-name">Certified Kubernetes Application Developer</div></div>
+      <div class="cert featured reveal" style="transition-delay:.16s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">핵심</span></div><div class="cert-code">KCSA</div><div class="cert-name">Kubernetes &amp; Cloud Native Security Associate</div></div>
+      <div class="cert featured reveal" style="transition-delay:.2s"><div class="cert-top"><span class="cert-issuer">CNCF</span><span class="cert-star">핵심</span></div><div class="cert-code">KCNA</div><div class="cert-name">Kubernetes &amp; Cloud Native Associate</div></div>
     </div>
   </div>
 </section>
@@ -926,20 +922,20 @@
 <section id="about">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">05 · About & Career</div>
+      <div class="eyebrow">05 · About &amp; Career</div>
       <h2 class="section-title">실무에서 강의로,<br>현장의 언어로 가르칩니다.</h2>
     </div>
     <div class="about-grid">
       <div class="about-summary reveal">
         <div style="display:flex;flex-direction:column;gap:16px;font-family:monospace;font-size:14px;">
-          <div style="color:var(--muted2)">// 2017 — <span style="color:var(--text);font-weight:600">CLOUD OPS</span></div>
-          <div style="color:var(--muted2)">// 2022 — <span style="color:var(--text);font-weight:600">TECH TRAINER</span></div>
-          <div style="color:var(--muted2)">// 2025 — <span style="color:var(--orange);font-weight:600">FOUNDER, SKILLEAT</span></div>
+          <div style="color:var(--text-muted)">// 2017 — <span style="color:var(--text-heading);font-weight:600">CLOUD OPS</span></div>
+          <div style="color:var(--text-muted)">// 2022 — <span style="color:var(--text-heading);font-weight:600">TECH TRAINER</span></div>
+          <div style="color:var(--text-muted)">// 2025 — <span style="color:var(--accent-hover);font-weight:600">FOUNDER, SKILLEAT</span></div>
         </div>
       </div>
       <div class="about-detail reveal" style="transition-delay:.1s">
-        <p>NIT Services(NAVER 계열), NHN Cloud에서 클라우드 운영·교육 실무를 거치며 인프라부터 사용자 트러블슈팅까지 전 과정을 직접 경험했습니다. 현재는 <strong style="color:#fff">Skilleat 대표</strong>로 기업·공공 대상 Microsoft Azure, Kubernetes, 생성형 AI 교육을 진행하고 있으며, Microsoft AI-900(Azure AI Fundamentals) 자격증 대비 강의도 운영하고 있습니다.</p>
-        <p>2026년 1월 <strong style="color:var(--orange)">Microsoft Certified Trainer</strong>로 등록되었고, 같은 해 3월 Microsoft AI Tour Korea에서 GitHub Copilot Agent Mode Lab Proctor로 참여했습니다.</p>
+        <p>NIT Services(NAVER 계열), NHN Cloud에서 클라우드 운영·교육 실무를 거치며 인프라부터 사용자 트러블슈팅까지 전 과정을 직접 경험했습니다. 현재는 <strong style="color:var(--text-heading)">Skilleat 대표</strong>로 기업·공공 대상 Microsoft Azure, Kubernetes, 생성형 AI 교육을 진행하고 있으며, Microsoft AI-900(Azure AI Fundamentals) 자격증 대비 강의도 운영하고 있습니다.</p>
+        <p>2026년 1월 <strong style="color:var(--accent-hover)">Microsoft Certified Trainer</strong>로 등록되었고, 같은 해 3월 Microsoft AI Tour Korea에서 GitHub Copilot Agent Mode Lab Proctor로 참여했습니다.</p>
         <div class="keywords">
           <span class="kw">Azure</span><span class="kw">Kubernetes</span><span class="kw">GenAI</span>
           <span class="kw">DevOps</span><span class="kw">GitHub Copilot</span><span class="kw">IaC</span>
@@ -948,10 +944,9 @@
       </div>
     </div>
 
-    <!-- Career subsection -->
     <div class="subsection-eyebrow reveal">커리어 타임라인</div>
     <div class="timeline">
-      <div class="tl-item current reveal">
+      <div class="tl-item reveal">
         <div class="tl-period">2025 — 현재</div>
         <div class="tl-right">
           <div class="tl-org">Skilleat</div>
@@ -979,7 +974,7 @@
       <div class="tl-item reveal" style="transition-delay:.1s">
         <div class="tl-period">EARLIER</div>
         <div class="tl-right">
-          <div class="tl-org">NIT Services <span style="color:var(--muted);font-size:13px;font-weight:400">— NAVER 계열</span></div>
+          <div class="tl-org">NIT Services <span style="color:var(--text-muted);font-size:13px;font-weight:400">— NAVER 계열</span></div>
           <div class="tl-role">Cloud Operations Engineer</div>
           <ul class="tl-list">
             <li>클라우드 인프라 운영 및 자동화 실무</li>
@@ -992,7 +987,7 @@
 </section>
 
 <!-- CONTENT (06) -->
-<section id="content">
+<section id="content" class="sect-alt">
   <div class="wrap">
     <div class="reveal">
       <div class="eyebrow">06 · Content</div>
@@ -1000,7 +995,6 @@
       <p class="section-sub">강의 외에도 책, 영상, 온라인 강의로 학습자가 혼자서도 이어갈 수 있는 자료를 만들고 있습니다.</p>
     </div>
     <div class="assets-grid-2">
-      <!-- Card 1: YouTube -->
       <div class="asset reveal">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></div>
         <span class="asset-status live">● LIVE</span>
@@ -1010,7 +1004,6 @@
         </div>
         <a href="https://www.youtube.com/@feeltechedu" target="_blank" class="asset-link">채널 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
-      <!-- Card 2: 쿠버네티스 10일 완주 세트 -->
       <div class="asset reveal" style="transition-delay:.06s">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
         <span class="asset-status live">● 판매 중</span>
@@ -1020,7 +1013,6 @@
         </div>
         <a href="https://skilleat.com" target="_blank" class="asset-link">바로 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
-      <!-- Card 3: Docker Essentials -->
       <div class="asset reveal" style="transition-delay:.09s">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
         <span class="asset-status live">● 판매 중</span>
@@ -1030,7 +1022,6 @@
         </div>
         <a href="https://skilleat.com" target="_blank" class="asset-link">바로 가기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
-      <!-- Card 4: 쿠버네티스 서적 + 인프런 강의 -->
       <div class="asset reveal" style="transition-delay:.12s">
         <div class="asset-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <span class="asset-status preparing">● 준비 중</span>
@@ -1145,23 +1136,23 @@
   ];
 
   const HISTORY_LIST = [
-    { sector: '공공기관',    course: 'AI-900 (Azure AI Fundamentals) 자격증 대비 과정' },
-    { sector: '공공기관',    course: '클라우드 인프라 구조 · 컨테이너 기술 개요' },
-    { sector: '금융권',      course: '클라우드 인프라 이해 교육' },
+    { sector: '공공기관',     course: 'AI-900 (Azure AI Fundamentals) 자격증 대비 과정' },
+    { sector: '공공기관',     course: '클라우드 인프라 구조 · 컨테이너 기술 개요' },
+    { sector: '금융권',       course: '클라우드 인프라 이해 교육' },
     { sector: '금융 계열 IT', course: '클라우드 엔지니어 양성과정 (인프라 · 네트워크 · Linux · Python · Docker · K8s)' },
-    { sector: 'IT 교육기관', course: '컨테이너 기반 아키텍처 · CI/CD 자동화 — 4개 과정 커리큘럼 설계 및 강의' },
-    { sector: 'IT 교육기관', course: 'Docker & Kubernetes 실무 교육' },
-    { sector: 'IT 교육기관', course: '멀티캠퍼스 정기 강의 (Azure / Kubernetes / 생성형 AI)' },
-    { sector: 'MSP 파트너',  course: 'NHN Cloud 서비스 운영 인프라 교육' },
-    { sector: 'MSP 파트너',  course: '클라우드 인프라 운영 · DevOps 기초' },
-    { sector: '지역 실무자', course: '가상화 · 클라우드 · 컨테이너 기술 교육' },
-    { sector: '의료기관',    course: 'KMI 한국의학연구소 생성형 AI 활용 강의' },
-    { sector: '파트너사',    course: 'GitHub Copilot 실습 교육 — Microsoft 파트너사 보조강사 (2026.05)' },
-    { sector: '글로벌 기업', course: 'CoorsTek Korea — Microsoft 공식 AI 교육 MS-4018/4019/4022 (2026.07)' },
+    { sector: 'IT 교육기관',  course: '컨테이너 기반 아키텍처 · CI/CD 자동화 — 4개 과정 커리큘럼 설계 및 강의' },
+    { sector: 'IT 교육기관',  course: 'Docker & Kubernetes 실무 교육' },
+    { sector: 'IT 교육기관',  course: '멀티캠퍼스 정기 강의 (Azure / Kubernetes / 생성형 AI)' },
+    { sector: 'MSP 파트너',   course: 'NHN Cloud 서비스 운영 인프라 교육' },
+    { sector: 'MSP 파트너',   course: '클라우드 인프라 운영 · DevOps 기초' },
+    { sector: '지역 실무자',  course: '가상화 · 클라우드 · 컨테이너 기술 교육' },
+    { sector: '의료기관',     course: 'KMI 한국의학연구소 생성형 AI 활용 강의' },
+    { sector: '파트너사',     course: 'GitHub Copilot 실습 교육 — Microsoft 파트너사 보조강사 (2026.05)' },
+    { sector: '글로벌 기업',  course: 'CoorsTek Korea — Microsoft 공식 AI 교육 MS-4018/4019/4022 (2026.07)' },
   ];
   // ==============================================
 
-  // Reveal on scroll — declare io FIRST so renderTracks() can use it
+  // Reveal on scroll
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
@@ -1192,7 +1183,6 @@
         <div class="track-meta-bar">${t.meta}</div>
       </div>
     `).join('');
-    // re-observe newly created .reveal elements
     container.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
@@ -1201,17 +1191,22 @@
     const container = document.getElementById('hist-list');
     if (!container) return;
     const n = HISTORY_LIST.length;
-    container.innerHTML = HISTORY_LIST.map((item, i) => {
-      const isLast = i === n - 1;
-      return `<div class="hist-item${isLast ? ' hist-last' : ''}" title="${item.course}">
+    container.innerHTML = HISTORY_LIST.map((item, i) => `
+      <div class="hist-item" title="${item.course}">
         <span class="hist-sector">${item.sector}</span>
         <span class="hist-course">${item.course}</span>
-      </div>`;
-    }).join('');
+      </div>
+    `).join('');
   }
 
   renderTracks();
   renderHistList();
+
+  // Navbar scroll transition
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('nav-scrolled', window.scrollY > 80);
+  }, { passive: true });
 
   // Stat counter
   const counters = document.querySelectorAll('[data-count]');
@@ -1236,8 +1231,7 @@
 
   // Mailto with clipboard fallback
   function handleMailto(e, email) {
-    const opened = window.open('mailto:' + email + '?subject=%5B%EA%B5%90%EC%9C%A1%20%EB%AC%B8%EC%9D%98%5D%20', '_self');
-    // If mail client not configured, fall back to copying email address
+    window.open('mailto:' + email + '?subject=%5B%EA%B5%90%EC%9C%A1%20%EB%AC%B8%EC%9D%98%5D%20', '_self');
     setTimeout(() => {
       try {
         navigator.clipboard.writeText(email).then(() => {
@@ -1252,7 +1246,7 @@
   }
   window.handleMailto = handleMailto;
 
-  // Copy email
+  // Copy email chip
   document.querySelectorAll('[data-copy]').forEach(btn => {
     btn.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(btn.dataset.copy); } catch(e) {}
