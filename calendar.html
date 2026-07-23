@@ -147,7 +147,7 @@
       display: grid; grid-template-columns: repeat(7, 1fr);
     }
     .cal-cell {
-      min-height: 110px;
+      min-height: 140px;
       padding: 14px 16px;
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
@@ -172,9 +172,22 @@
       cursor: default;
     }
     .cal-cell.busy .cal-day { color: var(--busy-text); }
+
+    /* Schedule label pills */
     .cal-busy-label {
-      font-size: 12px; font-weight: 600; color: var(--busy-text);
+      font-size: 12px; font-weight: 600;
       margin-top: 6px; letter-spacing: .3px;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 8px; border-radius: 5px;
+      max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cal-busy-label.confirmed {
+      background: var(--navy); color: rgba(255,255,255,0.85);
+    }
+    .cal-busy-label.tentative {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px dashed var(--border-strong);
     }
 
     /* Available day — clickable */
@@ -271,7 +284,7 @@
       .legend-item { font-size: 13px; }
       .main { padding: 32px 16px 60px; }
       .nav-inner { padding: 0 20px; }
-      .cal-cell { min-height: 68px; padding: 8px 8px; }
+      .cal-cell { min-height: 80px; padding: 8px 8px; }
       .cal-day { font-size: 13px; width: 26px; height: 26px; }
       .cal-hover-hint { display: none; }
       .cal-event-pill { display: none; }
@@ -303,7 +316,12 @@
     <p>빈 날짜를 클릭하면 해당 날짜로 교육 문의 메일이 자동으로 작성됩니다.</p>
     <div class="hint">
       <span class="legend-item"><span class="legend-dot available"></span>문의 가능</span>
-      <span class="legend-item"><span class="legend-dot busy"></span>강의 예정 / 불가</span>
+      <span class="legend-item">
+        <span style="display:inline-block;width:36px;height:16px;background:var(--navy);border-radius:4px;flex-shrink:0"></span>확정
+      </span>
+      <span class="legend-item">
+        <span style="display:inline-block;width:36px;height:16px;border:1.5px dashed rgba(255,255,255,0.35);border-radius:4px;flex-shrink:0"></span>미확정
+      </span>
       <span class="legend-item"><span class="legend-dot past"></span>지난 날짜</span>
     </div>
   </div>
@@ -356,51 +374,43 @@
   // 형식: 'YYYY-MM-DD' or 'YYYY-MM-DD:레이블'
   // 레이블 생략 시 "강의 예정"으로 표시됩니다.
   // ============================================================
+  // ★ 형식: 'YYYY-MM-DD:레이블:confirmed' 또는 'YYYY-MM-DD:레이블:tentative'
+  // ★ 세 번째 값 생략 시 → confirmed(확정) 처리
   const BUSY_DATES = [
     // 7월
-    '2026-07-08:취업 컨설팅',
-    '2026-07-10:취업 컨설팅',
-    '2026-07-15:Copilot Training',
-    '2026-07-16:Copilot Training',
-    '2026-07-20:온라인 강의 제작',
-    '2026-07-21:온라인 강의 제작',
-    '2026-07-22:온라인 강의 제작',
-    '2026-07-23:온라인 강의 제작',
-    '2026-07-24:온라인 강의 제작',
-    '2026-07-27:온라인 강의 제작',
-    '2026-07-28:온라인 강의 제작',
-    '2026-07-29:온라인 강의 제작',
-    '2026-07-30:온라인 강의 제작',
-    '2026-07-31:휴가',
+    '2026-07-08:취업 컨설팅:confirmed',
+    '2026-07-10:취업 컨설팅:confirmed',
+    '2026-07-15:Copilot Training:confirmed',
+    '2026-07-16:Copilot Training:confirmed',
+    '2026-07-20:온라인 강의 제작:confirmed',
+    '2026-07-21:온라인 강의 제작:confirmed',
+    '2026-07-22:온라인 강의 제작:confirmed',
+    '2026-07-23:온라인 강의 제작:confirmed',
+    '2026-07-24:온라인 강의 제작:confirmed',
+    '2026-07-27:온라인 강의 제작:confirmed',
+    '2026-07-28:온라인 강의 제작:confirmed',
+    '2026-07-29:온라인 강의 제작:confirmed',
+    '2026-07-30:온라인 강의 제작:confirmed',
     // 8월
-    '2026-08-01:휴가',
-    '2026-08-02:휴가',
-    '2026-08-03:휴가',
-    '2026-08-04:휴가',
-    '2026-08-05:휴가',
-    '2026-08-06:휴가',
-    '2026-08-07:휴가',
-    '2026-08-08:휴가',
-    '2026-08-09:휴가',
-    '2026-08-11:강연',
-    '2026-08-13:도커 강의',
-    '2026-08-14:도커 강의',
-    '2026-08-17:AZ-900 강의',
-    '2026-08-18:AZ-900 강의',
-    '2026-08-19:AZ-900 강의',
-    '2026-08-20:AZ-900 강의',
-    '2026-08-24:쿠버네티스 강의',
-    '2026-08-25:쿠버네티스 강의',
-    '2026-08-26:쿠버네티스 강의',
-    '2026-08-27:쿠버네티스 강의',
+    '2026-08-11:강연:tentative',
+    '2026-08-13:도커 강의:tentative',
+    '2026-08-14:도커 강의:tentative',
+    '2026-08-17:AZ-900 강의:tentative',
+    '2026-08-18:AZ-900 강의:tentative',
+    '2026-08-19:AZ-900 강의:tentative',
+    '2026-08-20:AZ-900 강의:tentative',
+    '2026-08-24:쿠버네티스 강의:tentative',
+    '2026-08-25:쿠버네티스 강의:tentative',
+    '2026-08-26:쿠버네티스 강의:tentative',
+    '2026-08-27:쿠버네티스 강의:tentative',
     // 9월
-    '2026-09-09:공공기관 클라우드 강의',
-    '2026-09-10:공공기관 클라우드 강의',
-    '2026-09-11:공공기관 클라우드 강의',
-    '2026-09-15:공공기관 클라우드 강의',
-    '2026-09-16:공공기관 클라우드 강의',
-    '2026-09-17:공공기관 클라우드 강의',
-    '2026-09-18:공공기관 클라우드 강의',
+    '2026-09-09:공공기관 클라우드:tentative',
+    '2026-09-10:공공기관 클라우드:tentative',
+    '2026-09-11:공공기관 클라우드:tentative',
+    '2026-09-15:공공기관 클라우드:tentative',
+    '2026-09-16:공공기관 클라우드:tentative',
+    '2026-09-17:공공기관 클라우드:tentative',
+    '2026-09-18:공공기관 클라우드:tentative',
   ];
   // ============================================================
 
@@ -408,11 +418,14 @@
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-  // Parse busy dates into a map: 'YYYY-MM-DD' → label
+  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status }
   const busyMap = {};
   BUSY_DATES.forEach(entry => {
-    const [date, label] = entry.split(':');
-    busyMap[date] = label || '강의 예정';
+    const parts = entry.split(':');
+    const date = parts[0];
+    const label = parts[1] || '일정 있음';
+    const status = parts[2] || 'confirmed';
+    busyMap[date] = { label, status };
   });
 
   let currentYear, currentMonth;
@@ -458,7 +471,7 @@
 
       const isPast = date < today;
       const isToday = date.getTime() === today.getTime();
-      const isBusy = !!busyMap[dateStr];
+      const isBusy = !!busyMap[dateStr] && !isPast;
 
       if (isToday) classes.push('today');
 
@@ -483,9 +496,11 @@
 
       // Busy label
       if (isBusy && !isPast) {
+        const { label, status } = busyMap[dateStr];
         const busyLabel = document.createElement('div');
-        busyLabel.className = 'cal-busy-label';
-        busyLabel.textContent = busyMap[dateStr];
+        busyLabel.className = `cal-busy-label ${status}`;
+        busyLabel.textContent = status === 'tentative' ? `△ ${label}` : label;
+        busyLabel.title = status === 'tentative' ? '미확정 일정' : '확정 일정';
         cell.appendChild(busyLabel);
       }
 
