@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>교육 일정 문의 · 김누리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:            #FFFFFF;
+      --bg-alt:        #F6F7F9;
+      --card:          #FFFFFF;
+      --border:        #E4E6EA;
+      --border-strong: #D5D8DE;
+      --text-heading:  #1A1A35;
+      --text-body:     #4A4E5A;
+      --text-muted:    #8A8F98;
+      --accent:        #E04E12;
+      --accent-hover:  #C4430E;
+      --accent-tint:   #FDEEE7;
+      --navy:          #1A1A35;
+      --busy-bg:       #F6F7F9;
+      --busy-text:     #C0C3CC;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-body);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    :focus:not(:focus-visible) { outline: none; }
+    :focus-visible {
+      outline: 2px solid var(--accent-hover);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px var(--accent-tint);
+      border-radius: 4px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      max-width: 900px; margin: 0 auto; padding: 0 40px;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 15px; color: #fff;
+    }
+    .nav-mark {
+      width: 30px; height: 30px; background: var(--accent);
+      border-radius: 7px; display: flex; align-items: center;
+      justify-content: center; font-weight: 900; font-size: 15px; color: #fff;
+    }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      transition: color .2s;
+    }
+    .nav-back:hover { color: #fff; }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* ── HERO BAND ── */
+    .page-hero {
+      background: var(--navy);
+      padding: 48px 40px 52px;
+    }
+    .page-hero-inner { max-width: 900px; margin: 0 auto; }
+    .page-hero h1 {
+      font-size: 36px; font-weight: 800; color: #fff;
+      letter-spacing: -1px; margin-bottom: 10px; line-height: 1.2;
+    }
+    .page-hero p {
+      font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 480px;
+    }
+    .page-hero .hint {
+      margin-top: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 13px; color: rgba(255,255,255,0.5);
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .legend-dot.available { background: var(--accent); }
+    .legend-dot.busy { background: rgba(255,255,255,0.2); }
+    .legend-dot.past { background: transparent; border: 1px solid rgba(255,255,255,0.2); }
+
+    /* ── MAIN ── */
+    .main { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
+
+    /* ── CALENDAR CONTROLS ── */
+    .cal-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .cal-month-label {
+      font-size: 22px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.5px;
+    }
+    .cal-nav { display: flex; gap: 8px; }
+    .cal-nav-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-body);
+      transition: border-color .2s, background .2s;
+    }
+    .cal-nav-btn:hover { border-color: var(--border-strong); background: var(--bg-alt); }
+    .cal-nav-btn svg { width: 16px; height: 16px; }
+
+    /* ── CALENDAR GRID ── */
+    .cal-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .cal-header {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+    }
+    .cal-header-cell {
+      text-align: center; padding: 12px 0;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .cal-header-cell:first-child { color: #E04E12; }
+    .cal-header-cell:last-child { color: #6B8CDA; }
+
+    .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+    }
+    .cal-cell {
+      min-height: 80px;
+      padding: 10px 12px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background .15s;
+    }
+    .cal-cell:nth-child(7n) { border-right: none; }
+    .cal-cell.empty {
+      background: var(--bg-alt);
+      opacity: 0.4;
+    }
+    .cal-cell.past {
+      background: var(--bg);
+      opacity: 0.45;
+      cursor: default;
+    }
+    .cal-cell.past .cal-day { color: var(--text-muted); }
+
+    /* Busy day */
+    .cal-cell.busy {
+      background: var(--bg-alt);
+      cursor: default;
+    }
+    .cal-cell.busy .cal-day { color: var(--busy-text); }
+    .cal-busy-label {
+      font-size: 10px; font-weight: 600; color: var(--busy-text);
+      margin-top: 4px; letter-spacing: .3px;
+    }
+
+    /* Available day — clickable */
+    .cal-cell.available {
+      cursor: pointer;
+    }
+    .cal-cell.available:hover {
+      background: var(--accent-tint);
+    }
+    .cal-cell.available:hover .cal-day { color: var(--accent); }
+    .cal-cell.available:hover .cal-hover-hint { opacity: 1; }
+
+    /* Today */
+    .cal-cell.today .cal-day-wrap .cal-day {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+
+    .cal-day-wrap { display: flex; align-items: center; gap: 0; }
+    .cal-day {
+      font-size: 14px; font-weight: 600;
+      color: var(--text-heading);
+      line-height: 1;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cal-cell.sunday .cal-day { color: #E04E12; }
+    .cal-cell.sunday.past .cal-day,
+    .cal-cell.sunday.busy .cal-day { color: var(--busy-text); }
+    .cal-cell.saturday .cal-day { color: #6B8CDA; }
+    .cal-cell.saturday.past .cal-day,
+    .cal-cell.saturday.busy .cal-day { color: var(--busy-text); }
+
+    .cal-hover-hint {
+      opacity: 0;
+      transition: opacity .15s;
+      font-size: 11px; color: var(--accent-hover); font-weight: 600;
+      margin-top: 6px; line-height: 1.3;
+    }
+
+    /* Events on a day */
+    .cal-events { margin-top: 5px; display: flex; flex-direction: column; gap: 3px; }
+    .cal-event-pill {
+      font-size: 10px; font-weight: 600;
+      background: var(--navy); color: rgba(255,255,255,0.85);
+      border-radius: 4px; padding: 2px 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* ── ASIDE NOTICE ── */
+    .cal-notice {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .cal-notice-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--accent-tint); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-hover);
+    }
+    .cal-notice-icon svg { width: 17px; height: 17px; }
+    .cal-notice-text { flex: 1; }
+    .cal-notice-text strong { font-size: 15px; color: var(--text-heading); display: block; margin-bottom: 4px; }
+    .cal-notice-text p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .cal-notice-text a { color: var(--accent-hover); font-weight: 600; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(12px);
+      background: var(--navy); color: #fff;
+      padding: 12px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(26,26,53,0.25);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      white-space: nowrap; z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .page-hero { padding: 36px 20px 40px; }
+      .page-hero h1 { font-size: 26px; }
+      .main { padding: 32px 16px 60px; }
+      .nav-inner { padding: 0 20px; }
+      .cal-cell { min-height: 56px; padding: 6px 6px; }
+      .cal-day { font-size: 12px; width: 22px; height: 22px; }
+      .cal-hover-hint { display: none; }
+      .cal-event-pill { display: none; }
+      .cal-busy-label { font-size: 9px; }
+      .cal-month-label { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-mark">N</div>
+      김누리
+    </div>
+    <a class="nav-back" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      프로필로 돌아가기
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>교육 일정 문의</h1>
+    <p>빈 날짜를 클릭하면 해당 날짜로 교육 문의 메일이 자동으로 작성됩니다.</p>
+    <div class="hint">
+      <span class="legend-item"><span class="legend-dot available"></span>문의 가능</span>
+      <span class="legend-item"><span class="legend-dot busy"></span>강의 예정 / 불가</span>
+      <span class="legend-item"><span class="legend-dot past"></span>지난 날짜</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="cal-controls">
+    <div class="cal-month-label" id="monthLabel"></div>
+    <div class="cal-nav">
+      <button class="cal-nav-btn" id="prevBtn" aria-label="이전 달">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="cal-nav-btn" id="nextBtn" aria-label="다음 달">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <div class="cal-header-cell">일</div>
+      <div class="cal-header-cell">월</div>
+      <div class="cal-header-cell">화</div>
+      <div class="cal-header-cell">수</div>
+      <div class="cal-header-cell">목</div>
+      <div class="cal-header-cell">금</div>
+      <div class="cal-header-cell">토</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <div class="cal-notice">
+    <div class="cal-notice-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="cal-notice-text">
+      <strong>직접 메일로 문의하기</strong>
+      <p>날짜 외 과정 내용, 대상, 기간 등 자유롭게 작성해 주세요.<br>
+      <a href="mailto:nr@skilleat.com?subject=%5B%EA%B5%90%EC%9C%A1%20%EC%9D%BC%EC%A0%95%20%EB%AC%B8%EC%9D%98%5D%20">nr@skilleat.com</a>으로 직접 보내셔도 됩니다.</p>
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+  // ============================================================
+  // ★ 강의 일정 관리 — 이 배열만 수정하면 달력에 반영됩니다 ★
+  // 형식: 'YYYY-MM-DD' or 'YYYY-MM-DD:레이블'
+  // 레이블 생략 시 "강의 예정"으로 표시됩니다.
+  // ============================================================
+  const BUSY_DATES = [
+    '2026-07-28:LG CNS',
+    '2026-07-29:LG CNS',
+    '2026-07-30:LG CNS',
+  ];
+  // ============================================================
+
+  const EMAIL = 'nr@skilleat.com';
+  const DAY_KO = ['일','월','화','수','목','금','토'];
+  const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+  // Parse busy dates into a map: 'YYYY-MM-DD' → label
+  const busyMap = {};
+  BUSY_DATES.forEach(entry => {
+    const [date, label] = entry.split(':');
+    busyMap[date] = label || '강의 예정';
+  });
+
+  let currentYear, currentMonth;
+
+  function init() {
+    const today = new Date();
+    currentYear = today.getFullYear();
+    currentMonth = today.getMonth();
+    render();
+  }
+
+  function render() {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    document.getElementById('monthLabel').textContent =
+      `${currentYear}년 ${MONTH_KO[currentMonth]}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay(); // 0=Sun
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    // Empty leading cells
+    for (let i = 0; i < firstDay; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell empty';
+      grid.appendChild(cell);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(currentYear, currentMonth, d);
+      date.setHours(0,0,0,0);
+      const dow = date.getDay();
+      const dateStr = formatDate(currentYear, currentMonth, d);
+
+      const cell = document.createElement('div');
+      const classes = ['cal-cell'];
+
+      if (dow === 0) classes.push('sunday');
+      if (dow === 6) classes.push('saturday');
+
+      const isPast = date < today;
+      const isToday = date.getTime() === today.getTime();
+      const isBusy = !!busyMap[dateStr];
+
+      if (isToday) classes.push('today');
+
+      if (isPast) {
+        classes.push('past');
+      } else if (isBusy) {
+        classes.push('busy');
+      } else {
+        classes.push('available');
+      }
+
+      cell.className = classes.join(' ');
+
+      // Day number
+      const dayWrap = document.createElement('div');
+      dayWrap.className = 'cal-day-wrap';
+      const dayEl = document.createElement('div');
+      dayEl.className = 'cal-day';
+      dayEl.textContent = d;
+      dayWrap.appendChild(dayEl);
+      cell.appendChild(dayWrap);
+
+      // Busy label
+      if (isBusy && !isPast) {
+        const busyLabel = document.createElement('div');
+        busyLabel.className = 'cal-busy-label';
+        busyLabel.textContent = busyMap[dateStr];
+        cell.appendChild(busyLabel);
+      }
+
+      // Hover hint for available
+      if (!isPast && !isBusy) {
+        const hint = document.createElement('div');
+        hint.className = 'cal-hover-hint';
+        hint.textContent = '문의 메일 보내기 →';
+        cell.appendChild(hint);
+      }
+
+      // Click handler for available dates
+      if (!isPast && !isBusy) {
+        cell.addEventListener('click', () => {
+          const dayName = DAY_KO[dow];
+          const label = `[교육 일정 문의] ${currentYear}년 ${currentMonth + 1}월 ${d}일 (${dayName})`;
+          const subject = encodeURIComponent(label);
+          window.location.href = `mailto:${EMAIL}?subject=${subject}`;
+          showToast(`${currentMonth + 1}월 ${d}일(${dayName}) 날짜로 메일을 여는 중...`);
+        });
+        cell.setAttribute('role', 'button');
+        cell.setAttribute('tabindex', '0');
+        cell.setAttribute('aria-label', `${currentMonth + 1}월 ${d}일 교육 문의`);
+        cell.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') cell.click();
+        });
+      }
+
+      grid.appendChild(cell);
+    }
+  }
+
+  function formatDate(y, m, d) {
+    return `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    render();
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    render();
+  });
+
+  init();
+</script>
+</body>
+</html>
