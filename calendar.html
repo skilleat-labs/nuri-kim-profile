@@ -180,7 +180,9 @@
       max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .cal-busy-label.confirmed {
-      background: var(--navy); color: rgba(255,255,255,0.85);
+      background: var(--accent-tint);
+      color: var(--accent-hover);
+      border: 1px solid rgba(224,78,18,0.3);
     }
     .cal-busy-label.tentative {
       background: transparent;
@@ -314,7 +316,7 @@
     <div class="hint">
       <span class="legend-item"><span class="legend-dot available"></span>문의 가능</span>
       <span class="legend-item">
-        <span style="display:inline-block;width:36px;height:16px;background:var(--navy);border-radius:4px;flex-shrink:0"></span>확정
+        <span style="display:inline-block;width:36px;height:16px;background:var(--accent-tint);border:1px solid rgba(224,78,18,0.3);border-radius:4px;flex-shrink:0"></span>확정
       </span>
       <span class="legend-item">
         <span style="display:inline-block;width:36px;height:16px;border:1.5px dashed rgba(255,255,255,0.35);border-radius:4px;flex-shrink:0"></span>미확정
@@ -496,7 +498,7 @@
         const { label, status } = busyMap[dateStr];
         const busyLabel = document.createElement('div');
         busyLabel.className = `cal-busy-label ${status}`;
-        busyLabel.textContent = status === 'tentative' ? `△ ${label}` : label;
+        busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
         busyLabel.title = status === 'tentative' ? '미확정 일정' : '확정 일정';
         cell.appendChild(busyLabel);
       }
