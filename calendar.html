@@ -162,6 +162,8 @@
       border-bottom: 1px solid var(--border);
       position: relative;
       transition: background .15s;
+      min-width: 0;
+      overflow: hidden;
     }
     .cal-cell:nth-child(7n) { border-right: none; }
     .cal-cell.empty {
@@ -184,11 +186,11 @@
 
     /* Schedule label pills */
     .cal-busy-label {
-      font-size: 12px; font-weight: 600;
+      font-size: 11px; font-weight: 600;
       margin-top: 6px; letter-spacing: .3px;
-      display: inline-flex; align-items: center; gap: 4px;
+      display: block;
       padding: 3px 8px; border-radius: 5px;
-      max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      width: 100%; word-break: keep-all; line-height: 1.4;
     }
     .cal-busy-label.confirmed {
       background: var(--accent-tint);
