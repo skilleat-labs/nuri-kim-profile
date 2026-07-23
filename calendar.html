@@ -201,6 +201,13 @@
       border: 1px dashed var(--border-strong);
     }
 
+    /* Blocked day — no label, not clickable */
+    .cal-cell.blocked {
+      background: var(--bg-alt);
+      cursor: not-allowed;
+    }
+    .cal-cell.blocked .cal-day { color: var(--busy-text); }
+
     /* Available day — clickable */
     .cal-cell.available {
       cursor: pointer;
@@ -404,9 +411,17 @@
     '2026-07-24:온라인 강의 제작:confirmed',
     '2026-07-27:온라인 강의 제작:confirmed',
     '2026-07-28:온라인 강의 제작:confirmed',
-    '2026-07-29:온라인 강의 제작:confirmed',
-    '2026-07-30:온라인 강의 제작:confirmed',
+    '2026-07-31::blocked',
     // 8월
+    '2026-08-01::blocked',
+    '2026-08-02::blocked',
+    '2026-08-03::blocked',
+    '2026-08-04::blocked',
+    '2026-08-05::blocked',
+    '2026-08-06::blocked',
+    '2026-08-07::blocked',
+    '2026-08-08::blocked',
+    '2026-08-09::blocked',
     '2026-08-11:강연:tentative',
     '2026-08-13:도커 강의:tentative',
     '2026-08-14:도커 강의:tentative',
@@ -486,12 +501,16 @@
 
       const isPast = date < today;
       const isToday = date.getTime() === today.getTime();
-      const isBusy = !!busyMap[dateStr] && !isPast;
+      const busyEntry = busyMap[dateStr];
+      const isBusy = !!busyEntry && !isPast && busyEntry.status !== 'blocked';
+      const isBlocked = !!busyEntry && !isPast && busyEntry.status === 'blocked';
 
       if (isToday) classes.push('today');
 
       if (isPast) {
         classes.push('past');
+      } else if (isBlocked) {
+        classes.push('blocked');
       } else if (isBusy) {
         classes.push('busy');
       } else {
@@ -509,9 +528,9 @@
       dayWrap.appendChild(dayEl);
       cell.appendChild(dayWrap);
 
-      // Busy label
+      // Busy label (blocked은 라벨 없음)
       if (isBusy && !isPast) {
-        const { label, status } = busyMap[dateStr];
+        const { label, status } = busyEntry;
         const busyLabel = document.createElement('div');
         busyLabel.className = `cal-busy-label ${status}`;
         busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
@@ -520,7 +539,7 @@
       }
 
       // Hover hint for available
-      if (!isPast && !isBusy) {
+      if (!isPast && !isBusy && !isBlocked) {
         const hint = document.createElement('div');
         hint.className = 'cal-hover-hint';
         hint.textContent = '문의 메일 보내기 →';
@@ -528,7 +547,7 @@
       }
 
       // Click handler for available dates
-      if (!isPast && !isBusy) {
+      if (!isPast && !isBusy && !isBlocked) {
         cell.addEventListener('click', () => {
           const dayName = DAY_KO[dow];
           const label = `[교육 일정 문의] ${currentYear}년 ${currentMonth + 1}월 ${d}일 (${dayName})`;
@@ -542,6 +561,9 @@
         cell.addEventListener('keydown', e => {
           if (e.key === 'Enter' || e.key === ' ') cell.click();
         });
+      }
+      if (isBlocked) {
+        cell.setAttribute('aria-disabled', 'true');
       }
 
       grid.appendChild(cell);
