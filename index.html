@@ -558,25 +558,55 @@
       display: grid; grid-template-columns: 1fr 1fr;
       margin-top: 24px;
       border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
+      border-radius: 16px; overflow: visible;
       background: var(--card);
     }
     .hist-item {
       display: flex; align-items: baseline; gap: 12px;
-      padding: 11px 18px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
-      min-width: 0;
+      min-width: 0; position: relative;
+      cursor: default;
     }
     .hist-item:nth-child(2n+1) { border-right: 1px solid var(--border); }
     .hist-item:last-child { border-bottom: none; }
     .hist-sector {
-      flex-shrink: 0; width: 80px;
-      font-size: 11px; font-weight: 700;
+      flex-shrink: 0; width: 90px;
+      font-size: 12px; font-weight: 700;
       color: var(--text-muted); letter-spacing: .3px;
     }
     .hist-course {
-      flex: 1; font-size: 13px; color: var(--text-body);
+      flex: 1; font-size: 15px; color: var(--text-body);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* Hover tooltip */
+    .hist-item[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 0;
+      background: var(--navy);
+      color: #fff;
+      font-size: 13px; line-height: 1.6;
+      padding: 10px 16px;
+      border-radius: 10px;
+      white-space: normal;
+      max-width: 420px;
+      min-width: 200px;
+      z-index: 50;
+      box-shadow: 0 6px 24px rgba(26,26,53,0.18);
+      pointer-events: none;
+    }
+    .hist-item[data-tip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 1px);
+      left: 24px;
+      border: 7px solid transparent;
+      border-top-color: var(--navy);
+      z-index: 50;
+      pointer-events: none;
     }
 
     /* Subsection label */
@@ -1196,8 +1226,8 @@
     const container = document.getElementById('hist-list');
     if (!container) return;
     const n = HISTORY_LIST.length;
-    container.innerHTML = HISTORY_LIST.map((item, i) => `
-      <div class="hist-item" title="${item.course}">
+    container.innerHTML = HISTORY_LIST.map((item) => `
+      <div class="hist-item" data-tip="${item.course}">
         <span class="hist-sector">${item.sector}</span>
         <span class="hist-course">${item.course}</span>
       </div>
