@@ -68,9 +68,20 @@
       justify-content: center; font-weight: 900; font-size: 15px; color: #fff;
       flex-shrink: 0;
     }
-    .nav-brand-text { display: flex; flex-direction: column; gap: 1px; }
-    .nav-brand-name { font-weight: 700; font-size: 15px; color: #fff; line-height: 1.2; }
-    .nav-brand-sub { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 400; line-height: 1.2; }
+    .nav-brand-name { font-weight: 700; font-size: 15px; color: #fff; }
+    .nav-right {
+      display: flex; align-items: center; gap: 20px;
+    }
+    .nav-tagline {
+      font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 400;
+    }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      transition: color .2s; white-space: nowrap;
+    }
+    .nav-back:hover { color: #fff; }
+    .nav-back svg { width: 14px; height: 14px; }
 
     /* ── HERO BAND ── */
     .page-hero {
@@ -278,6 +289,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
+      .nav-tagline { display: none; }
       .page-hero { padding: 36px 20px 40px; }
       .page-hero h1 { font-size: 32px; }
       .page-hero p { font-size: 16px; }
@@ -300,11 +312,15 @@
   <div class="nav-inner">
     <a class="nav-brand" href="index.html">
       <div class="nav-mark">N</div>
-      <div class="nav-brand-text">
-        <span class="nav-brand-name">김누리</span>
-        <span class="nav-brand-sub">감 잡아주는 테크 트레이너</span>
-      </div>
+      <span class="nav-brand-name">김누리</span>
     </a>
+    <div class="nav-right">
+      <span class="nav-tagline">감 잡아주는 테크 트레이너</span>
+      <a class="nav-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        프로필로 돌아가기
+      </a>
+    </div>
   </div>
 </nav>
 
