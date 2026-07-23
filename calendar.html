@@ -454,9 +454,22 @@
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
+  // 관리자 페이지에서 저장한 데이터가 있으면 우선 사용
+  const KEY_DATA = 'sk_busy_dates';
+  let activeDates = BUSY_DATES;
+  try {
+    const saved = localStorage.getItem(KEY_DATA);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        activeDates = parsed.map(e => `${e.date}:${e.label}:${e.status}`);
+      }
+    }
+  } catch(e) {}
+
   // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status }
   const busyMap = {};
-  BUSY_DATES.forEach(entry => {
+  activeDates.forEach(entry => {
     const parts = entry.split(':');
     const date = parts[0];
     const label = parts[1] || '일정 있음';

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 · 일정 관리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #F6F7F9; --card: #FFFFFF; --border: #E4E6EA; --border-strong: #D5D8DE;
+      --text-heading: #1A1A35; --text-body: #4A4E5A; --text-muted: #8A8F98;
+      --accent: #E04E12; --accent-hover: #C4430E; --accent-tint: #FDEEE7;
+      --navy: #1A1A35;
+      --confirmed: #FDEEE7; --confirmed-text: #C4430E; --confirmed-border: rgba(224,78,18,0.3);
+      --tentative-border: #D5D8DE; --tentative-text: #8A8F98;
+      --green: #E6F4EA; --green-text: #1E7E34;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-body); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── SCREENS ── */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ── AUTH SCREENS (setup / login) ── */
+    .auth-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px;
+    }
+    .auth-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px;
+    }
+    .auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+    .auth-mark {
+      width: 36px; height: 36px; background: var(--accent); border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 17px; color: #fff;
+    }
+    .auth-title { font-size: 22px; font-weight: 800; color: var(--text-heading); margin-bottom: 6px; }
+    .auth-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.5; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px; }
+    .field input {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 15px; font-family: inherit;
+      background: var(--bg); color: var(--text-heading);
+      transition: border-color .2s;
+    }
+    .field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+    .btn-primary {
+      width: 100%; padding: 14px; background: var(--accent); color: #fff;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .auth-error {
+      background: #FEE2E2; border: 1px solid #FECACA; color: #B91C1C;
+      padding: 10px 14px; border-radius: 8px; font-size: 13px;
+      margin-bottom: 16px; display: none;
+    }
+    .auth-error.show { display: block; }
+
+    /* ── ADMIN LAYOUT ── */
+    #screen-admin { background: var(--bg); }
+    .admin-nav {
+      background: var(--navy); padding: 0 40px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-nav-brand { display: flex; align-items: center; gap: 10px; }
+    .admin-mark {
+      width: 28px; height: 28px; background: var(--accent); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px; color: #fff;
+    }
+    .admin-nav-title { font-size: 14px; font-weight: 700; color: #fff; }
+    .admin-nav-right { display: flex; align-items: center; gap: 16px; }
+    .admin-nav-link {
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      display: inline-flex; align-items: center; gap: 5px;
+      cursor: pointer; transition: color .2s; background: none; border: none; font-family: inherit;
+    }
+    .admin-nav-link:hover { color: #fff; }
+    .admin-nav-link svg { width: 14px; height: 14px; }
+
+    .admin-main { max-width: 900px; margin: 0 auto; padding: 40px 40px 80px; }
+
+    /* ── ADD FORM ── */
+    .add-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 32px; margin-bottom: 32px;
+    }
+    .add-card-title { font-size: 17px; font-weight: 700; color: var(--text-heading); margin-bottom: 20px; }
+    .add-row { display: grid; grid-template-columns: 160px 1fr 140px auto; gap: 12px; align-items: end; }
+    .add-row .field { margin-bottom: 0; }
+    .field select {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 14px; font-family: inherit;
+      background: var(--bg); color: var(--text-heading);
+      appearance: none; cursor: pointer;
+    }
+    .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+    .btn-add {
+      padding: 12px 20px; background: var(--accent); color: #fff;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
+      font-family: inherit; cursor: pointer; white-space: nowrap; height: 46px;
+      transition: background .2s;
+    }
+    .btn-add:hover { background: var(--accent-hover); }
+
+    /* ── DATE LIST ── */
+    .list-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .list-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+    }
+    .list-header-title { font-size: 17px; font-weight: 700; color: var(--text-heading); }
+    .list-count { font-size: 13px; color: var(--text-muted); }
+    .list-empty {
+      padding: 48px 24px; text-align: center;
+      font-size: 14px; color: var(--text-muted);
+    }
+    .list-group-label {
+      padding: 8px 24px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--text-muted); background: var(--bg); text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .list-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 24px; border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item:hover { background: var(--bg); }
+    .list-date { font-size: 14px; font-weight: 700; color: var(--text-heading); width: 90px; flex-shrink: 0; font-family: monospace; }
+    .list-dow { font-size: 12px; color: var(--text-muted); width: 20px; flex-shrink: 0; }
+    .list-label { flex: 1; font-size: 14px; color: var(--text-body); }
+    .status-pill {
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .status-pill.confirmed { background: var(--confirmed); color: var(--confirmed-text); border: 1px solid var(--confirmed-border); }
+    .status-pill.tentative { background: transparent; color: var(--tentative-text); border: 1px dashed var(--tentative-border); }
+    .status-pill.blocked { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-delete {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: none; border: 1px solid var(--border);
+      color: var(--text-muted); cursor: pointer; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s; flex-shrink: 0;
+    }
+    .btn-delete:hover { background: #FEE2E2; border-color: #FECACA; color: #B91C1C; }
+
+    /* ── EXPORT ── */
+    .export-card {
+      margin-top: 24px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 32px;
+    }
+    .export-title { font-size: 15px; font-weight: 700; color: var(--text-heading); margin-bottom: 8px; }
+    .export-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+    .export-row { display: flex; gap: 10px; }
+    .btn-secondary {
+      padding: 10px 18px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--text-body);
+      font-family: inherit; cursor: pointer; transition: border-color .2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-secondary:hover { border-color: var(--border-strong); }
+    .btn-secondary svg { width: 14px; height: 14px; }
+    textarea.export-code {
+      width: 100%; margin-top: 12px; padding: 14px; border: 1px solid var(--border);
+      border-radius: 10px; font-size: 12px; font-family: monospace;
+      background: var(--bg); color: var(--text-body);
+      resize: vertical; min-height: 120px; display: none;
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px);
+      background: var(--navy); color: #fff; padding: 11px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none;
+      transition: opacity .25s, transform .25s; white-space: nowrap; z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .admin-nav { padding: 0 20px; }
+      .admin-main { padding: 24px 16px 60px; }
+      .add-card { padding: 20px; }
+      .add-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+      .add-row .btn-add { grid-column: span 2; width: 100%; }
+      .auth-card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SETUP SCREEN ── -->
+<div id="screen-setup" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-mark">N</div>
+        <span style="font-weight:700;font-size:15px;color:var(--text-heading)">관리자 계정 설정</span>
+      </div>
+      <div class="auth-title">처음 오셨군요!</div>
+      <div class="auth-sub">사용할 아이디와 비밀번호를 설정해 주세요.<br>이후 이 정보로 로그인하게 됩니다.</div>
+      <div id="setup-error" class="auth-error">비밀번호가 일치하지 않습니다.</div>
+      <div class="field">
+        <label>아이디</label>
+        <input type="text" id="setup-id" placeholder="아이디 입력" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="setup-pw" placeholder="비밀번호 입력" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>비밀번호 확인</label>
+        <input type="password" id="setup-pw2" placeholder="비밀번호 재입력" autocomplete="new-password">
+      </div>
+      <button class="btn-primary" onclick="doSetup()">계정 만들기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="screen-login" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-mark">N</div>
+        <span style="font-weight:700;font-size:15px;color:var(--text-heading)">일정 관리자</span>
+      </div>
+      <div class="auth-title">로그인</div>
+      <div class="auth-sub">관리자 아이디와 비밀번호를 입력하세요.</div>
+      <div id="login-error" class="auth-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+      <div class="field">
+        <label>아이디</label>
+        <input type="text" id="login-id" placeholder="아이디" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="login-pw" placeholder="비밀번호" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN SCREEN ── -->
+<div id="screen-admin" class="screen">
+  <nav class="admin-nav">
+    <div class="admin-nav-brand">
+      <div class="admin-mark">N</div>
+      <span class="admin-nav-title">일정 관리자</span>
+    </div>
+    <div class="admin-nav-right">
+      <a class="admin-nav-link" href="calendar.html" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        캘린더 보기
+      </a>
+      <button class="admin-nav-link" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        로그아웃
+      </button>
+    </div>
+  </nav>
+
+  <div class="admin-main">
+
+    <!-- 일정 추가 -->
+    <div class="add-card">
+      <div class="add-card-title">일정 추가</div>
+      <div class="add-row">
+        <div class="field">
+          <label>날짜</label>
+          <input type="date" id="add-date">
+        </div>
+        <div class="field">
+          <label>내용 <span style="color:var(--text-muted);font-weight:400">(blocked은 비워도 됨)</span></label>
+          <input type="text" id="add-label" placeholder="예: 멀캠 · 쿠버네티스">
+        </div>
+        <div class="field">
+          <label>상태</label>
+          <select id="add-status">
+            <option value="confirmed">● 확정</option>
+            <option value="tentative">△ 미확정</option>
+            <option value="blocked">— 비활성화</option>
+          </select>
+        </div>
+        <button class="btn-add" onclick="addEntry()">추가</button>
+      </div>
+    </div>
+
+    <!-- 일정 목록 -->
+    <div class="list-card">
+      <div class="list-header">
+        <div class="list-header-title">등록된 일정</div>
+        <div class="list-count" id="list-count"></div>
+      </div>
+      <div id="entry-list"></div>
+    </div>
+
+    <!-- 내보내기 -->
+    <div class="export-card">
+      <div class="export-title">코드 내보내기</div>
+      <div class="export-desc">다른 기기에서도 같은 일정을 쓰려면 아래 코드를 복사해서<br><code style="font-size:12px;background:var(--bg);padding:2px 6px;border-radius:4px">calendar.html</code> 의 BUSY_DATES 배열에 붙여넣으세요.</div>
+      <div class="export-row">
+        <button class="btn-secondary" onclick="toggleExport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="3" y2="12"/></svg>
+          코드 보기
+        </button>
+        <button class="btn-secondary" onclick="copyExport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          복사
+        </button>
+      </div>
+      <textarea id="export-code" class="export-code" readonly></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ── STORAGE KEYS ──
+  const KEY_ID   = 'sk_admin_id';
+  const KEY_HASH = 'sk_admin_hash';
+  const KEY_SESS = 'sk_admin_session';
+  const KEY_DATA = 'sk_busy_dates';
+
+  const DAY_KO = ['일','월','화','수','목','금','토'];
+
+  // ── SHA-256 ──
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // ── SCREEN CONTROL ──
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+  }
+
+  // ── INIT ──
+  async function init() {
+    const session = sessionStorage.getItem(KEY_SESS);
+    if (session && session === localStorage.getItem(KEY_SESS)) {
+      showScreen('admin');
+      renderList();
+      return;
+    }
+    if (localStorage.getItem(KEY_HASH)) {
+      showScreen('login');
+      document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    } else {
+      showScreen('setup');
+    }
+  }
+
+  // ── SETUP ──
+  async function doSetup() {
+    const id  = document.getElementById('setup-id').value.trim();
+    const pw  = document.getElementById('setup-pw').value;
+    const pw2 = document.getElementById('setup-pw2').value;
+    const err = document.getElementById('setup-error');
+    if (!id || !pw) { err.textContent = '아이디와 비밀번호를 모두 입력해 주세요.'; err.classList.add('show'); return; }
+    if (pw !== pw2) { err.textContent = '비밀번호가 일치하지 않습니다.'; err.classList.add('show'); return; }
+    err.classList.remove('show');
+    const hash = await sha256(pw);
+    localStorage.setItem(KEY_ID, id);
+    localStorage.setItem(KEY_HASH, hash);
+    showToast('계정이 생성됐어요!');
+    showScreen('login');
+  }
+
+  // ── LOGIN ──
+  async function doLogin() {
+    const id   = document.getElementById('login-id').value.trim();
+    const pw   = document.getElementById('login-pw').value;
+    const err  = document.getElementById('login-error');
+    const hash = await sha256(pw);
+    if (id === localStorage.getItem(KEY_ID) && hash === localStorage.getItem(KEY_HASH)) {
+      const token = crypto.randomUUID();
+      localStorage.setItem(KEY_SESS, token);
+      sessionStorage.setItem(KEY_SESS, token);
+      err.classList.remove('show');
+      showScreen('admin');
+      renderList();
+    } else {
+      err.classList.add('show');
+    }
+  }
+
+  // ── LOGOUT ──
+  function doLogout() {
+    sessionStorage.removeItem(KEY_SESS);
+    showScreen('login');
+    document.getElementById('login-id').value = '';
+    document.getElementById('login-pw').value = '';
+  }
+
+  // ── DATA ──
+  function loadData() {
+    try { return JSON.parse(localStorage.getItem(KEY_DATA) || '[]'); } catch { return []; }
+  }
+  function saveData(arr) {
+    arr.sort((a,b) => a.date.localeCompare(b.date));
+    localStorage.setItem(KEY_DATA, JSON.stringify(arr));
+  }
+
+  // ── ADD ──
+  function addEntry() {
+    const date   = document.getElementById('add-date').value;
+    const label  = document.getElementById('add-label').value.trim();
+    const status = document.getElementById('add-status').value;
+    if (!date) { showToast('날짜를 선택해 주세요.'); return; }
+    const arr = loadData();
+    const existing = arr.findIndex(e => e.date === date);
+    if (existing >= 0) {
+      arr[existing] = { date, label, status };
+      showToast('기존 일정을 업데이트했어요.');
+    } else {
+      arr.push({ date, label, status });
+      showToast('일정이 추가됐어요!');
+    }
+    saveData(arr);
+    renderList();
+    document.getElementById('add-date').value = '';
+    document.getElementById('add-label').value = '';
+  }
+
+  // ── DELETE ──
+  function deleteEntry(date) {
+    const arr = loadData().filter(e => e.date !== date);
+    saveData(arr);
+    renderList();
+    showToast('삭제됐어요.');
+  }
+
+  // ── RENDER LIST ──
+  function renderList() {
+    const arr = loadData();
+    const container = document.getElementById('entry-list');
+    document.getElementById('list-count').textContent = `총 ${arr.length}개`;
+    if (arr.length === 0) {
+      container.innerHTML = '<div class="list-empty">등록된 일정이 없습니다.<br>위에서 일정을 추가해 보세요.</div>';
+      return;
+    }
+
+    // Group by month
+    const groups = {};
+    arr.forEach(e => {
+      const ym = e.date.slice(0,7);
+      if (!groups[ym]) groups[ym] = [];
+      groups[ym].push(e);
+    });
+
+    let html = '';
+    Object.keys(groups).sort().forEach(ym => {
+      const [y, m] = ym.split('-');
+      html += `<div class="list-group-label">${y}년 ${parseInt(m)}월</div>`;
+      groups[ym].forEach(e => {
+        const d = new Date(e.date + 'T00:00:00');
+        const dow = DAY_KO[d.getDay()];
+        const dayNum = e.date.slice(8);
+        const statusLabel = e.status === 'confirmed' ? '확정' : e.status === 'tentative' ? '미확정' : '비활성';
+        const labelText = e.label || '—';
+        html += `
+          <div class="list-item">
+            <span class="list-date">${parseInt(e.date.slice(5,7))}월 ${parseInt(dayNum)}일</span>
+            <span class="list-dow">${dow}</span>
+            <span class="list-label">${labelText}</span>
+            <span class="status-pill ${e.status}">${statusLabel}</span>
+            <button class="btn-delete" onclick="deleteEntry('${e.date}')" title="삭제">✕</button>
+          </div>`;
+      });
+    });
+    container.innerHTML = html;
+  }
+
+  // ── EXPORT ──
+  let exportVisible = false;
+  function buildExportCode() {
+    const arr = loadData();
+    const lines = arr.map(e => `    '${e.date}:${e.label}:${e.status}',`).join('\n');
+    return `  const BUSY_DATES = [\n${lines}\n  ];`;
+  }
+  function toggleExport() {
+    exportVisible = !exportVisible;
+    const ta = document.getElementById('export-code');
+    ta.style.display = exportVisible ? 'block' : 'none';
+    if (exportVisible) ta.value = buildExportCode();
+  }
+  function copyExport() {
+    navigator.clipboard.writeText(buildExportCode()).then(() => showToast('코드가 복사됐어요!'));
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ── Enter key for login ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('screen-setup').classList.contains('active')) doSetup();
+      if (document.getElementById('screen-login').classList.contains('active')) doLogin();
+    }
+  });
+
+  init();
+</script>
+</body>
+</html>
