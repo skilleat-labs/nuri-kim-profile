@@ -213,6 +213,17 @@
       color: var(--text-muted);
       border: 1px dashed var(--border-strong);
     }
+    .cal-event-block {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+    .cal-event-block:first-child {
+      margin-top: 4px;
+      padding-top: 0;
+      border-top: none;
+    }
+
     .cal-mode-badge {
       display: inline-block;
       font-size: 9px; font-weight: 700; letter-spacing: .4px;
@@ -459,7 +470,8 @@
     '2026-08-08::blocked',
     '2026-08-09::blocked',
     '2026-08-10:광주전남 인프라 교육:confirmed:19:00:22:00:online',
-    '2026-08-11:직무강연 · 인프라 교육:confirmed:14:00:22:00',
+    '2026-08-11:직무 강연:confirmed:14:00:16:00:offline',
+    '2026-08-11:광주전남 인프라 교육:confirmed:19:00:22:00:online',
     '2026-08-12:광주전남 인프라 교육:confirmed:19:00:22:00:online',
     '2026-08-13:기업 · 도커 강의:confirmed:14:00:18:00:online',
     '2026-08-14:기업 · 도커 강의:confirmed:14:00:18:00:online',
@@ -490,24 +502,26 @@
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status, startTime, endTime, mode }
+  // Parse busy dates into a map: 'YYYY-MM-DD' → [{ label, status, startTime, endTime, mode }, ...]
   const busyMap = {};
+
+  function addToBusyMap(dateStr, event) {
+    if (!busyMap[dateStr]) busyMap[dateStr] = [];
+    busyMap[dateStr].push(event);
+  }
 
   // 하드코딩 배열 먼저 파싱
   BUSY_DATES.forEach(entry => {
     const parts = entry.split(':');
     // Format: 'YYYY-MM-DD:label:status' or 'YYYY-MM-DD:label:status:HH:MM:HH:MM:online/offline'
-    // Time values also contain ':' so we reconstruct them from pairs of parts
     const startTime = parts.length >= 5 ? parts[3] + ':' + parts[4] : '';
     const endTime   = parts.length >= 7 ? parts[5] + ':' + parts[6] : '';
-    const mode      = parts.length >= 8 ? parts[7] : '';  // 'online' | 'offline' | ''
-    busyMap[parts[0]] = {
-      label:     parts[1] || '일정 있음',
-      status:    parts[2] || 'confirmed',
-      startTime,
-      endTime,
-      mode
-    };
+    const mode      = parts.length >= 8 ? parts[7] : '';
+    addToBusyMap(parts[0], {
+      label:  parts[1] || '일정 있음',
+      status: parts[2] || 'confirmed',
+      startTime, endTime, mode
+    });
   });
 
   // 관리자 페이지 localStorage 데이터가 있으면 덮어씀 (시간 포함)
@@ -516,16 +530,15 @@
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // localStorage 데이터로 완전히 교체
         Object.keys(busyMap).forEach(k => delete busyMap[k]);
         parsed.forEach(e => {
-          busyMap[e.date] = {
+          addToBusyMap(e.date, {
             label:     e.label || '',
             status:    e.status || 'confirmed',
             startTime: e.startTime || '',
             endTime:   e.endTime || '',
             mode:      e.mode || ''
-          };
+          });
         });
       }
     }
@@ -574,9 +587,9 @@
 
       const isPast = date < today;
       const isToday = date.getTime() === today.getTime();
-      const busyEntry = busyMap[dateStr];
-      const isBusy = !!busyEntry && !isPast && busyEntry.status !== 'blocked';
-      const isBlocked = !!busyEntry && !isPast && busyEntry.status === 'blocked';
+      const busyEntries = busyMap[dateStr] || [];
+      const isBusy = busyEntries.length > 0 && !isPast && busyEntries.some(e => e.status !== 'blocked');
+      const isBlocked = busyEntries.length > 0 && !isPast && busyEntries.every(e => e.status === 'blocked');
 
       if (isToday) classes.push('today');
 
@@ -601,38 +614,46 @@
       dayWrap.appendChild(dayEl);
       cell.appendChild(dayWrap);
 
-      // Busy label (blocked은 라벨 없음)
+      // Busy labels (blocked은 라벨 없음)
       if (isBusy && !isPast) {
-        const { label, status, startTime, endTime, mode } = busyEntry;
-        const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
+        const visibleEntries = busyEntries.filter(e => e.status !== 'blocked');
+        if (visibleEntries.length > 0) cell.classList.add('has-time');
 
-        // 1) 시간 (있을 때만, 위에 굵게)
-        if (startTime || endTime) {
-          const timeEl = document.createElement('div');
-          timeEl.className = 'cal-time';
-          if (startTime && endTime) {
-            timeEl.innerHTML = `${startTime}-<br>${endTime}`;
-          } else {
-            timeEl.textContent = startTime ? `${startTime}~` : `~${endTime}`;
+        visibleEntries.forEach(({ label, status, startTime, endTime, mode }) => {
+          const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
+
+          const eventWrap = document.createElement('div');
+          eventWrap.className = 'cal-event-block';
+
+          // 시간
+          if (startTime || endTime) {
+            const timeEl = document.createElement('div');
+            timeEl.className = 'cal-time';
+            if (startTime && endTime) {
+              timeEl.innerHTML = `${startTime}-<br>${endTime}`;
+            } else {
+              timeEl.textContent = startTime ? `${startTime}~` : `~${endTime}`;
+            }
+            eventWrap.appendChild(timeEl);
           }
-          cell.appendChild(timeEl);
-          cell.classList.add('has-time');
-        }
 
-        // 2) 온라인/오프라인 뱃지
-        if (mode === 'online' || mode === 'offline') {
-          const modeEl = document.createElement('div');
-          modeEl.className = `cal-mode-badge ${mode}`;
-          modeEl.textContent = mode === 'online' ? '온라인' : '오프라인';
-          cell.appendChild(modeEl);
-        }
+          // 온라인/오프라인 뱃지
+          if (mode === 'online' || mode === 'offline') {
+            const modeEl = document.createElement('div');
+            modeEl.className = `cal-mode-badge ${mode}`;
+            modeEl.textContent = mode === 'online' ? '온라인' : '오프라인';
+            eventWrap.appendChild(modeEl);
+          }
 
-        // 3) 일정 라벨
-        const busyLabel = document.createElement('div');
-        busyLabel.className = `cal-busy-label ${status}`;
-        busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
-        busyLabel.title = (status === 'tentative' ? '미확정' : '확정') + tipTime;
-        cell.appendChild(busyLabel);
+          // 라벨
+          const busyLabel = document.createElement('div');
+          busyLabel.className = `cal-busy-label ${status}`;
+          busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
+          busyLabel.title = (status === 'tentative' ? '미확정' : '확정') + tipTime;
+          eventWrap.appendChild(busyLabel);
+
+          cell.appendChild(eventWrap);
+        });
       }
 
       // Hover hint for available
