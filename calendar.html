@@ -209,6 +209,19 @@
       color: var(--text-muted);
       border: 1px dashed var(--border-strong);
     }
+    .cal-mode-badge {
+      display: inline-block;
+      font-size: 9px; font-weight: 700; letter-spacing: .4px;
+      padding: 1px 5px; border-radius: 3px;
+      margin-top: 3px; text-transform: uppercase;
+    }
+    .cal-mode-badge.online {
+      background: #DBEAFE; color: #1D4ED8;
+    }
+    .cal-mode-badge.offline {
+      background: #D1FAE5; color: #065F46;
+    }
+
     .cal-time {
       font-size: 13px; font-weight: 700;
       color: var(--text-heading);
@@ -412,6 +425,7 @@
   // 레이블 생략 시 "강의 예정"으로 표시됩니다.
   // ============================================================
   // ★ 형식: 'YYYY-MM-DD:레이블:confirmed' 또는 'YYYY-MM-DD:레이블:tentative'
+  // ★ 시간/장소 포함: 'YYYY-MM-DD:레이블:confirmed:HH:MM:HH:MM:online' (또는 :offline)
   // ★ 세 번째 값 생략 시 → confirmed(확정) 처리
   const BUSY_DATES = [
     // 7월
@@ -440,11 +454,11 @@
     '2026-08-11:직무 강연:confirmed',
     '2026-08-13:기업 · 도커 강의:confirmed',
     '2026-08-14:기업 · 도커 강의:confirmed',
-    '2026-08-17:AZ-900 강의:confirmed:09:00:15:30',
-    '2026-08-18:AZ-900 강의:confirmed:09:00:15:30',
-    '2026-08-19:AZ-900 강의:confirmed:09:00:15:30',
-    '2026-08-20:AZ-900 강의:confirmed:14:00:17:00',
-    '2026-08-21:Copilot 웨비나:confirmed',
+    '2026-08-17:AZ-900 강의:confirmed:09:00:15:30:online',
+    '2026-08-18:AZ-900 강의:confirmed:09:00:15:30:online',
+    '2026-08-19:AZ-900 강의:confirmed:09:00:15:30:online',
+    '2026-08-20:AZ-900 강의:confirmed:14:00:17:00:offline',
+    '2026-08-21:Copilot 웨비나:confirmed:14:00:16:00:online',
     '2026-08-24:멀캠 · 쿠버네티스 강의:tentative',
     '2026-08-25:멀캠 · 쿠버네티스 강의:tentative',
     '2026-08-26:멀캠 · 쿠버네티스 강의:tentative',
@@ -467,21 +481,23 @@
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status, startTime, endTime }
+  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status, startTime, endTime, mode }
   const busyMap = {};
 
   // 하드코딩 배열 먼저 파싱
   BUSY_DATES.forEach(entry => {
     const parts = entry.split(':');
-    // Format: 'YYYY-MM-DD:label:status' or 'YYYY-MM-DD:label:status:HH:MM:HH:MM'
+    // Format: 'YYYY-MM-DD:label:status' or 'YYYY-MM-DD:label:status:HH:MM:HH:MM:online/offline'
     // Time values also contain ':' so we reconstruct them from pairs of parts
     const startTime = parts.length >= 5 ? parts[3] + ':' + parts[4] : '';
     const endTime   = parts.length >= 7 ? parts[5] + ':' + parts[6] : '';
+    const mode      = parts.length >= 8 ? parts[7] : '';  // 'online' | 'offline' | ''
     busyMap[parts[0]] = {
       label:     parts[1] || '일정 있음',
       status:    parts[2] || 'confirmed',
       startTime,
-      endTime
+      endTime,
+      mode
     };
   });
 
@@ -498,7 +514,8 @@
             label:     e.label || '',
             status:    e.status || 'confirmed',
             startTime: e.startTime || '',
-            endTime:   e.endTime || ''
+            endTime:   e.endTime || '',
+            mode:      e.mode || ''
           };
         });
       }
@@ -577,7 +594,7 @@
 
       // Busy label (blocked은 라벨 없음)
       if (isBusy && !isPast) {
-        const { label, status, startTime, endTime } = busyEntry;
+        const { label, status, startTime, endTime, mode } = busyEntry;
         const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
 
         // 1) 시간 (있을 때만, 위에 굵게)
@@ -593,7 +610,15 @@
           cell.classList.add('has-time');
         }
 
-        // 2) 상태 뱃지
+        // 2) 온라인/오프라인 뱃지
+        if (mode === 'online' || mode === 'offline') {
+          const modeEl = document.createElement('div');
+          modeEl.className = `cal-mode-badge ${mode}`;
+          modeEl.textContent = mode === 'online' ? '온라인' : '오프라인';
+          cell.appendChild(modeEl);
+        }
+
+        // 3) 일정 라벨
         const busyLabel = document.createElement('div');
         busyLabel.className = `cal-busy-label ${status}`;
         busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
