@@ -432,10 +432,10 @@
     '2026-08-11:직무 강연:confirmed',
     '2026-08-13:기업 · 도커 강의:confirmed',
     '2026-08-14:기업 · 도커 강의:confirmed',
-    '2026-08-17:AZ-900 강의:confirmed',
-    '2026-08-18:AZ-900 강의:confirmed',
-    '2026-08-19:AZ-900 강의:confirmed',
-    '2026-08-20:AZ-900 강의:confirmed',
+    '2026-08-17:AZ-900 강의:confirmed:09:00:15:30',
+    '2026-08-18:AZ-900 강의:confirmed:09:00:15:30',
+    '2026-08-19:AZ-900 강의:confirmed:09:00:15:30',
+    '2026-08-20:AZ-900 강의:confirmed:14:00:17:00',
     '2026-08-21:Copilot 웨비나:confirmed',
     '2026-08-24:멀캠 · 쿠버네티스 강의:tentative',
     '2026-08-25:멀캠 · 쿠버네티스 강의:tentative',
@@ -465,11 +465,15 @@
   // 하드코딩 배열 먼저 파싱
   BUSY_DATES.forEach(entry => {
     const parts = entry.split(':');
+    // Format: 'YYYY-MM-DD:label:status' or 'YYYY-MM-DD:label:status:HH:MM:HH:MM'
+    // Time values also contain ':' so we reconstruct them from pairs of parts
+    const startTime = parts.length >= 5 ? parts[3] + ':' + parts[4] : '';
+    const endTime   = parts.length >= 7 ? parts[5] + ':' + parts[6] : '';
     busyMap[parts[0]] = {
       label:     parts[1] || '일정 있음',
       status:    parts[2] || 'confirmed',
-      startTime: '',
-      endTime:   ''
+      startTime,
+      endTime
     };
   });
 
