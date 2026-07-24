@@ -94,7 +94,7 @@
       border-radius: 16px; padding: 28px 32px; margin-bottom: 32px;
     }
     .add-card-title { font-size: 17px; font-weight: 700; color: var(--text-heading); margin-bottom: 20px; }
-    .add-row { display: grid; grid-template-columns: 160px 1fr 140px auto; gap: 12px; align-items: end; }
+    .add-row { display: grid; grid-template-columns: 150px 1fr 110px 110px 130px auto; gap: 12px; align-items: end; }
     .add-row .field { margin-bottom: 0; }
     .field select {
       width: 100%; padding: 12px 14px; border: 1px solid var(--border);
@@ -141,6 +141,7 @@
     .list-date { font-size: 14px; font-weight: 700; color: var(--text-heading); width: 90px; flex-shrink: 0; font-family: monospace; }
     .list-dow { font-size: 12px; color: var(--text-muted); width: 20px; flex-shrink: 0; }
     .list-label { flex: 1; font-size: 14px; color: var(--text-body); }
+    .list-time { font-size: 12px; color: var(--text-muted); font-family: monospace; flex-shrink: 0; width: 110px; }
     .status-pill {
       font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
       flex-shrink: 0;
@@ -194,8 +195,9 @@
       .admin-nav { padding: 0 20px; }
       .admin-main { padding: 24px 16px 60px; }
       .add-card { padding: 20px; }
-      .add-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+      .add-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto auto; }
       .add-row .btn-add { grid-column: span 2; width: 100%; }
+      .list-time { display: none; }
       .auth-card { padding: 32px 24px; }
     }
   </style>
@@ -290,6 +292,14 @@
         <div class="field">
           <label>내용 <span style="color:var(--text-muted);font-weight:400">(blocked은 비워도 됨)</span></label>
           <input type="text" id="add-label" placeholder="예: 멀캠 · 쿠버네티스">
+        </div>
+        <div class="field">
+          <label>시작 시간</label>
+          <input type="time" id="add-start" placeholder="09:00">
+        </div>
+        <div class="field">
+          <label>종료 시간</label>
+          <input type="time" id="add-end" placeholder="18:00">
         </div>
         <div class="field">
           <label>상태</label>
@@ -435,23 +445,30 @@
 
   // ── ADD ──
   function addEntry() {
-    const date   = document.getElementById('add-date').value;
-    const label  = document.getElementById('add-label').value.trim();
-    const status = document.getElementById('add-status').value;
+    const date      = document.getElementById('add-date').value;
+    const label     = document.getElementById('add-label').value.trim();
+    const startTime = document.getElementById('add-start').value;
+    const endTime   = document.getElementById('add-end').value;
+    const status    = document.getElementById('add-status').value;
     if (!date) { showToast('날짜를 선택해 주세요.'); return; }
+    const entry = { date, label, status };
+    if (startTime) entry.startTime = startTime;
+    if (endTime)   entry.endTime   = endTime;
     const arr = loadData();
     const existing = arr.findIndex(e => e.date === date);
     if (existing >= 0) {
-      arr[existing] = { date, label, status };
+      arr[existing] = entry;
       showToast('기존 일정을 업데이트했어요.');
     } else {
-      arr.push({ date, label, status });
+      arr.push(entry);
       showToast('일정이 추가됐어요!');
     }
     saveData(arr);
     renderList();
     document.getElementById('add-date').value = '';
     document.getElementById('add-label').value = '';
+    document.getElementById('add-start').value = '';
+    document.getElementById('add-end').value = '';
   }
 
   // ── DELETE ──
@@ -490,11 +507,14 @@
         const dayNum = e.date.slice(8);
         const statusLabel = e.status === 'confirmed' ? '확정' : e.status === 'tentative' ? '미확정' : '비활성';
         const labelText = e.label || '—';
+        const timeText = (e.startTime && e.endTime) ? `${e.startTime} ~ ${e.endTime}`
+                       : e.startTime ? `${e.startTime}~` : '';
         html += `
           <div class="list-item">
             <span class="list-date">${parseInt(e.date.slice(5,7))}월 ${parseInt(dayNum)}일</span>
             <span class="list-dow">${dow}</span>
             <span class="list-label">${labelText}</span>
+            <span class="list-time">${timeText}</span>
             <span class="status-pill ${e.status}">${statusLabel}</span>
             <button class="btn-delete" onclick="deleteEntry('${e.date}')" title="삭제">✕</button>
           </div>`;

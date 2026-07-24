@@ -202,6 +202,11 @@
       color: var(--text-muted);
       border: 1px dashed var(--border-strong);
     }
+    .cal-time {
+      font-size: 10px; color: var(--text-muted);
+      margin-top: 4px; padding-left: 2px;
+      font-family: monospace; letter-spacing: .3px;
+    }
 
     /* Blocked day — no label, not clickable */
     .cal-cell.blocked {
@@ -454,28 +459,39 @@
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-  // 관리자 페이지에서 저장한 데이터가 있으면 우선 사용
-  const KEY_DATA = 'sk_busy_dates';
-  let activeDates = BUSY_DATES;
+  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status, startTime, endTime }
+  const busyMap = {};
+
+  // 하드코딩 배열 먼저 파싱
+  BUSY_DATES.forEach(entry => {
+    const parts = entry.split(':');
+    busyMap[parts[0]] = {
+      label:     parts[1] || '일정 있음',
+      status:    parts[2] || 'confirmed',
+      startTime: '',
+      endTime:   ''
+    };
+  });
+
+  // 관리자 페이지 localStorage 데이터가 있으면 덮어씀 (시간 포함)
   try {
-    const saved = localStorage.getItem(KEY_DATA);
+    const saved = localStorage.getItem('sk_busy_dates');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        activeDates = parsed.map(e => `${e.date}:${e.label}:${e.status}`);
+        // localStorage 데이터로 완전히 교체
+        Object.keys(busyMap).forEach(k => delete busyMap[k]);
+        parsed.forEach(e => {
+          busyMap[e.date] = {
+            label:     e.label || '',
+            status:    e.status || 'confirmed',
+            startTime: e.startTime || '',
+            endTime:   e.endTime || ''
+          };
+        });
       }
     }
   } catch(e) {}
-
-  // Parse busy dates into a map: 'YYYY-MM-DD' → { label, status }
-  const busyMap = {};
-  activeDates.forEach(entry => {
-    const parts = entry.split(':');
-    const date = parts[0];
-    const label = parts[1] || '일정 있음';
-    const status = parts[2] || 'confirmed';
-    busyMap[date] = { label, status };
-  });
 
   let currentYear, currentMonth;
 
@@ -549,12 +565,22 @@
 
       // Busy label (blocked은 라벨 없음)
       if (isBusy && !isPast) {
-        const { label, status } = busyEntry;
+        const { label, status, startTime, endTime } = busyEntry;
         const busyLabel = document.createElement('div');
         busyLabel.className = `cal-busy-label ${status}`;
         busyLabel.textContent = status === 'tentative' ? `△ ${label}` : `● ${label}`;
-        busyLabel.title = status === 'tentative' ? '미확정 일정' : '확정 일정';
+        const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
+        busyLabel.title = (status === 'tentative' ? '미확정' : '확정') + tipTime;
         cell.appendChild(busyLabel);
+
+        // 시간 표시
+        if (startTime || endTime) {
+          const timeEl = document.createElement('div');
+          timeEl.className = 'cal-time';
+          timeEl.textContent = (startTime && endTime) ? `${startTime} ~ ${endTime}`
+                             : startTime ? `${startTime}~` : `~${endTime}`;
+          cell.appendChild(timeEl);
+        }
       }
 
       // Hover hint for available
