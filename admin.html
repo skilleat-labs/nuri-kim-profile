@@ -200,6 +200,45 @@
       .list-time { display: none; }
       .auth-card { padding: 32px 24px; }
     }
+
+    /* ── REVIEW MANAGEMENT ── */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+    .section-title { font-size: 20px; font-weight: 800; color: var(--text-heading); letter-spacing: -0.5px; margin-bottom: 6px; }
+    .section-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+    .token-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 32px; margin-bottom: 16px; }
+    .token-row { display: flex; gap: 10px; align-items: flex-end; }
+    .token-row .field { flex: 1; margin-bottom: 0; }
+    .token-status { font-size: 12px; margin-top: 8px; }
+    .token-status.ok { color: var(--green-text); }
+    .token-status.err { color: #B91C1C; }
+    .review-add-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; margin-bottom: 16px; }
+    .review-form-grid { display: grid; grid-template-columns: 160px 1fr; gap: 12px; }
+    .review-form-full { grid-column: 1 / -1; }
+    .field textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text-heading); resize: vertical; min-height: 80px; }
+    .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+    .photo-upload-wrap { border: 1.5px dashed var(--border-strong); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
+    .photo-upload-wrap:hover { border-color: var(--accent); background: var(--accent-tint); }
+    .photo-upload-wrap input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-hint { font-size: 13px; color: var(--text-muted); pointer-events: none; }
+    .photo-preview { margin-top: 12px; display: none; text-align: center; }
+    .photo-preview img { max-width: 100%; max-height: 180px; border-radius: 8px; object-fit: cover; }
+    .btn-gh-save { padding: 13px 24px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-gh-save:hover { background: #2d2d5a; }
+    .btn-gh-save:disabled { opacity: 0.5; cursor: not-allowed; }
+    .gh-save-row { display: flex; gap: 12px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+    .save-status { font-size: 13px; }
+    .save-status.loading { color: var(--text-muted); }
+    .save-status.ok { color: var(--green-text); }
+    .save-status.err { color: #B91C1C; }
+    .review-list-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .review-list-item { display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-bottom: 1px solid var(--border); }
+    .review-list-item:last-child { border-bottom: none; }
+    .review-list-thumb { width: 60px; height: 42px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .review-list-thumb-ph { width: 60px; height: 42px; border-radius: 6px; background: var(--bg-alt); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .review-list-info { flex: 1; min-width: 0; }
+    .review-list-date { font-size: 11px; color: var(--accent); font-weight: 700; }
+    .review-list-title { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+    .review-list-comment { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   </style>
 </head>
 <body>
@@ -337,6 +376,69 @@
         </button>
       </div>
       <textarea id="export-code" class="export-code" readonly></textarea>
+    </div>
+
+    <hr class="section-divider">
+    <div class="section-title">강의 후기 관리</div>
+    <p class="section-sub">강의를 마친 후 사진 1장과 간단한 후기를 남겨두세요.<br>저장하면 GitHub에 자동으로 반영되어 캘린더 하단에 표시됩니다.</p>
+
+    <!-- GitHub Token -->
+    <div class="token-card">
+      <div class="add-card-title" style="margin-bottom:14px">GitHub 토큰 설정</div>
+      <div class="token-row">
+        <div class="field">
+          <label>Personal Access Token <span style="font-weight:400;color:var(--text-muted)">(Contents: read+write 권한, 이 기기에만 저장됨)</span></label>
+          <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+        </div>
+        <button class="btn-add" onclick="saveToken()">저장</button>
+      </div>
+      <div id="token-status" class="token-status"></div>
+    </div>
+
+    <!-- Review Add Form -->
+    <div class="review-add-card">
+      <div class="add-card-title" style="margin-bottom:18px">후기 추가</div>
+      <div class="review-form-grid">
+        <div class="field">
+          <label>날짜</label>
+          <input type="date" id="rv-date">
+        </div>
+        <div class="field">
+          <label>강의명</label>
+          <input type="text" id="rv-title" placeholder="예: 광주전남 쿠버네티스">
+        </div>
+        <div class="field review-form-full">
+          <label>한 줄 후기 <span style="font-weight:400;color:var(--text-muted)">(선택)</span></label>
+          <textarea id="rv-comment" placeholder="강의 분위기, 수강생 반응, 기억에 남는 점 등을 자유롭게 적어주세요."></textarea>
+        </div>
+        <div class="field review-form-full">
+          <label>사진 <span style="font-weight:400;color:var(--text-muted)">(선택, 1장)</span></label>
+          <div class="photo-upload-wrap" id="photo-wrap">
+            <input type="file" id="rv-photo" accept="image/*" onchange="previewPhoto(this)">
+            <div class="upload-hint" id="upload-hint-text">클릭하거나 사진을 드래그해서 올려주세요</div>
+          </div>
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img" src="" alt="미리보기">
+            <button class="btn-secondary" style="margin-top:8px;font-size:12px" onclick="clearPhoto()">사진 제거</button>
+          </div>
+        </div>
+      </div>
+      <div class="gh-save-row">
+        <button class="btn-gh-save" id="btn-save-review" onclick="saveReview()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub에 저장
+        </button>
+        <span id="save-status" class="save-status"></span>
+      </div>
+    </div>
+
+    <!-- Review List -->
+    <div class="review-list-card">
+      <div class="list-header">
+        <div class="list-header-title">등록된 후기</div>
+        <div class="list-count" id="review-count"></div>
+      </div>
+      <div id="review-list"><div class="list-empty">토큰을 저장하면 목록을 불러옵니다.</div></div>
     </div>
 
   </div>
@@ -557,6 +659,191 @@
   });
 
   init();
+
+  // ── GITHUB REVIEWS ──
+  const GH_OWNER  = 'skilleat-labs';
+  const GH_REPO   = 'nuri-kim-profile';
+  const GH_FILE   = 'reviews.json';
+  const KEY_TOKEN = 'sk_gh_token';
+
+  let ghReviews = [];
+  let ghSha = '';
+
+  function saveToken() {
+    const token = document.getElementById('gh-token').value.trim();
+    if (!token) { showToast('토큰을 입력해 주세요.'); return; }
+    localStorage.setItem(KEY_TOKEN, token);
+    setTokenStatus('연결 중...', '');
+    fetchReviews();
+  }
+
+  function setTokenStatus(msg, type) {
+    const el = document.getElementById('token-status');
+    el.textContent = msg;
+    el.className = `token-status ${type}`;
+  }
+
+  async function fetchReviews() {
+    const token = localStorage.getItem(KEY_TOKEN);
+    if (!token) return;
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,
+        { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } }
+      );
+      if (!res.ok) throw new Error(`GitHub API 오류 (${res.status})`);
+      const data = await res.json();
+      ghSha = data.sha;
+      ghReviews = JSON.parse(atob(data.content.replace(/\n/g, '')));
+      renderReviewList();
+      setTokenStatus('연결됨', 'ok');
+    } catch(e) {
+      setTokenStatus(e.message, 'err');
+      document.getElementById('review-list').innerHTML =
+        `<div class="list-empty">${e.message}</div>`;
+    }
+  }
+
+  async function pushReviews(commitMsg) {
+    const token = localStorage.getItem(KEY_TOKEN);
+    if (!token) throw new Error('토큰이 없습니다.');
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(ghReviews, null, 2))));
+    const res = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: commitMsg, content, sha: ghSha })
+      }
+    );
+    if (!res.ok) throw new Error(`저장 실패 (${res.status})`);
+    const result = await res.json();
+    ghSha = result.content.sha;
+  }
+
+  let photoDataUrl = '';
+
+  function previewPhoto(input) {
+    const file = input.files[0];
+    if (!file) return;
+    resizeImage(file).then(dataUrl => {
+      photoDataUrl = dataUrl;
+      document.getElementById('photo-preview-img').src = dataUrl;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('upload-hint-text').textContent = file.name;
+    });
+  }
+
+  function clearPhoto() {
+    photoDataUrl = '';
+    document.getElementById('rv-photo').value = '';
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('upload-hint-text').textContent = '클릭하거나 사진을 드래그해서 올려주세요';
+  }
+
+  function resizeImage(file, maxW = 600, quality = 0.65) {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxW / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width  = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function saveReview() {
+    const date    = document.getElementById('rv-date').value;
+    const title   = document.getElementById('rv-title').value.trim();
+    const comment = document.getElementById('rv-comment').value.trim();
+    if (!date || !title) { showToast('날짜와 강의명을 입력해 주세요.'); return; }
+
+    const btn = document.getElementById('btn-save-review');
+    const statusEl = document.getElementById('save-status');
+    btn.disabled = true;
+    statusEl.textContent = 'GitHub에 저장 중...';
+    statusEl.className = 'save-status loading';
+
+    const review = { id: `${date}-${Date.now()}`, date, title, comment, photo: photoDataUrl };
+    ghReviews.unshift(review);
+
+    try {
+      await pushReviews(`Add review: ${date} ${title}`);
+      renderReviewList();
+      document.getElementById('rv-date').value = '';
+      document.getElementById('rv-title').value = '';
+      document.getElementById('rv-comment').value = '';
+      clearPhoto();
+      statusEl.textContent = '저장 완료! GitHub Pages 배포까지 1~2분 소요됩니다.';
+      statusEl.className = 'save-status ok';
+    } catch(e) {
+      ghReviews.shift();
+      statusEl.textContent = e.message;
+      statusEl.className = 'save-status err';
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function deleteReview(id) {
+    if (!confirm('이 후기를 삭제할까요?')) return;
+    const idx = ghReviews.findIndex(r => r.id === id);
+    if (idx < 0) return;
+    const removed = ghReviews.splice(idx, 1);
+    try {
+      await pushReviews(`Delete review: ${removed[0].date}`);
+      renderReviewList();
+      showToast('삭제됐어요.');
+    } catch(e) {
+      ghReviews.splice(idx, 0, ...removed);
+      showToast(`삭제 실패: ${e.message}`);
+    }
+  }
+
+  function renderReviewList() {
+    const container = document.getElementById('review-list');
+    document.getElementById('review-count').textContent = `총 ${ghReviews.length}개`;
+    if (!ghReviews.length) {
+      container.innerHTML = '<div class="list-empty">등록된 후기가 없습니다.</div>';
+      return;
+    }
+    container.innerHTML = ghReviews.map(r => `
+      <div class="review-list-item">
+        ${r.photo
+          ? `<img class="review-list-thumb" src="${r.photo}" alt="">`
+          : `<div class="review-list-thumb-ph">📷</div>`
+        }
+        <div class="review-list-info">
+          <div class="review-list-date">${r.date}</div>
+          <div class="review-list-title">${r.title}</div>
+          ${r.comment ? `<div class="review-list-comment">${r.comment}</div>` : ''}
+        </div>
+        <button class="btn-delete" onclick="deleteReview('${r.id}')" title="삭제">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // 토큰 자동 복원 및 후기 로드
+  (function initReviews() {
+    const t = localStorage.getItem(KEY_TOKEN);
+    if (t) {
+      document.getElementById('gh-token').value = t;
+      fetchReviews();
+    }
+  })();
+
 </script>
 </body>
 </html>
