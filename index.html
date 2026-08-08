@@ -224,6 +224,17 @@
       color: rgba(255,255,255,0.6);
     }
     .photo-card-badge span { color: var(--accent); }
+    .photo-card-badge-right {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(26,26,53,0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(100,200,120,0.35);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: rgba(255,255,255,0.6);
+    }
+    .photo-card-badge-right span { color: #6fcf97; }
     .photo-card-bottom {
       padding: 20px 20px 22px;
       border-top: 1px solid rgba(255,255,255,0.1);
@@ -737,6 +748,7 @@
           <span>Cloud</span>
           <span>Kubernetes · Container · DevOps</span>
           <span>생성형 AI · Microsoft AI · Azure</span>
+          <span style="color:#6fcf97;border-color:rgba(100,200,120,0.35)">★ Linux Foundation Kubestronaut</span>
         </div>
         <div class="contact-bar">
           <a class="chip chip-primary" href="calendar.html">
@@ -768,6 +780,7 @@
         <div class="photo-card">
           <img src="nrkim.png" alt="김누리 프로필">
           <div class="photo-card-badge"><span>MCT</span> CERTIFIED TRAINER 2026</div>
+          <div class="photo-card-badge-right"><span>★</span> KUBESTRONAUT</div>
           <div class="photo-card-bottom">
             <div class="photo-card-name">김누리 / Nuri Kim</div>
             <div class="photo-card-role">Skilleat — Founder · Tech Trainer</div>
@@ -799,9 +812,9 @@
         <span class="stat-tag">// certified 2026.01</span>
       </div>
       <div class="stat-card reveal" style="transition-delay:.15s">
-        <div class="stat-num" data-count="8" data-suffix="">0</div>
+        <div class="stat-num" data-count="9" data-suffix="">0</div>
         <div class="stat-label">Certifications</div>
-        <span class="stat-tag">// MCT · AZ-104 · CKA · CKAD · KCSA · KCNA · AWS · AI-900</span>
+        <span class="stat-tag">// MCT · AZ-104 · CKA · CKAD · CKS · KCSA · KCNA · AWS · AI-900</span>
       </div>
     </div>
   </div>
