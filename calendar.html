@@ -286,6 +286,18 @@
     .cal-cell.saturday.past .cal-day,
     .cal-cell.saturday.busy .cal-day { color: var(--busy-text); }
 
+    /* Holiday */
+    .cal-cell.holiday .cal-day { color: #E04E12 !important; }
+    .cal-cell.holiday.past .cal-day { color: var(--busy-text) !important; }
+    .cal-holiday-name {
+      font-size: 10px; font-weight: 600;
+      color: #E04E12;
+      margin-top: 3px;
+      display: block;
+      line-height: 1.3;
+    }
+    .cal-cell.past .cal-holiday-name { color: var(--busy-text); }
+
     .cal-hover-hint {
       opacity: 0;
       transition: opacity .15s;
@@ -443,6 +455,7 @@
         <span style="display:inline-block;width:36px;height:16px;border:1.5px dashed rgba(255,255,255,0.35);border-radius:4px;flex-shrink:0"></span>미확정
       </span>
       <span class="legend-item"><span class="legend-dot past"></span>지난 날짜</span>
+      <span class="legend-item" style="color:rgba(255,255,255,0.5);font-size:15px;">🔴 공휴일</span>
     </div>
   </div>
 </div>
@@ -580,6 +593,57 @@
   ];
   // ============================================================
 
+  // ============================================================
+  // ★ 대한민국 공휴일 (빨간색 표시)
+  // ============================================================
+  const HOLIDAYS = {
+    // 2025
+    '2025-01-01': '신정',
+    '2025-01-28': '설날 연휴',
+    '2025-01-29': '설날',
+    '2025-01-30': '설날 연휴',
+    '2025-03-01': '삼일절',
+    '2025-05-05': '어린이날',
+    '2025-05-06': '대체공휴일',
+    '2025-06-06': '현충일',
+    '2025-08-15': '광복절',
+    '2025-10-03': '개천절',
+    '2025-10-05': '추석 연휴',
+    '2025-10-06': '추석',
+    '2025-10-07': '추석 연휴',
+    '2025-10-09': '한글날',
+    '2025-12-25': '크리스마스',
+    // 2026
+    '2026-01-01': '신정',
+    '2026-02-16': '설날 연휴',
+    '2026-02-17': '설날',
+    '2026-02-18': '설날 연휴',
+    '2026-03-01': '삼일절',
+    '2026-05-05': '어린이날',
+    '2026-05-25': '부처님오신날',
+    '2026-06-06': '현충일',
+    '2026-08-15': '광복절',
+    '2026-09-24': '추석 연휴',
+    '2026-09-25': '추석',
+    '2026-09-26': '추석 연휴',
+    '2026-10-03': '개천절',
+    '2026-10-09': '한글날',
+    '2026-12-25': '크리스마스',
+    // 2027
+    '2027-01-01': '신정',
+    '2027-02-06': '설날 연휴',
+    '2027-02-07': '설날',
+    '2027-02-08': '설날 연휴',
+    '2027-03-01': '삼일절',
+    '2027-05-05': '어린이날',
+    '2027-06-06': '현충일',
+    '2027-08-15': '광복절',
+    '2027-10-03': '개천절',
+    '2027-10-09': '한글날',
+    '2027-12-25': '크리스마스',
+  };
+  // ============================================================
+
   const EMAIL = 'nr@skilleat.com';
   const DAY_KO = ['일','월','화','수','목','금','토'];
   const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -667,6 +731,9 @@
       if (dow === 0) classes.push('sunday');
       if (dow === 6) classes.push('saturday');
 
+      const holidayName = HOLIDAYS[dateStr] || null;
+      if (holidayName) classes.push('holiday');
+
       const isPast = date < today;
       const isToday = date.getTime() === today.getTime();
       const busyEntries = busyMap[dateStr] || [];
@@ -695,6 +762,14 @@
       dayEl.textContent = d;
       dayWrap.appendChild(dayEl);
       cell.appendChild(dayWrap);
+
+      // Holiday name label
+      if (holidayName) {
+        const holidayEl = document.createElement('span');
+        holidayEl.className = 'cal-holiday-name';
+        holidayEl.textContent = holidayName;
+        cell.appendChild(holidayEl);
+      }
 
       // Busy labels (blocked은 라벨 없음)
       if (isBusy && !isPast) {
