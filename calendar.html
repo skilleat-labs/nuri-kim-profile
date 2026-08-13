@@ -568,8 +568,7 @@
     '2026-09-29:쿠버네티스 멀캠 선릉:tentative',
     '2026-09-30:쿠버네티스 멀캠 선릉:tentative',
     '2026-10-01:쿠버네티스 멀캠 선릉:tentative',
-    '2026-09-21:Copilot Agent 교육:tentative',
-    '2026-09-22:Copilot Agent 교육:tentative',
+
     '2026-09-08:공공기관 클라우드:confirmed:10:00:16:00:offline',
     '2026-09-09:공공기관 클라우드:confirmed:10:00:16:00:offline',
     '2026-09-10:공공기관 클라우드:confirmed:10:00:16:00:offline',
@@ -737,7 +736,8 @@
       const isPast = date < today;
       const isToday = date.getTime() === today.getTime();
       const busyEntries = busyMap[dateStr] || [];
-      const isBusy = busyEntries.length > 0 && !isPast && busyEntries.some(e => e.status !== 'blocked');
+      const hasEvents = busyEntries.length > 0 && busyEntries.some(e => e.status !== 'blocked');
+      const isBusy = hasEvents && !isPast;
       const isBlocked = busyEntries.length > 0 && !isPast && busyEntries.every(e => e.status === 'blocked');
 
       if (isToday) classes.push('today');
@@ -771,10 +771,10 @@
         cell.appendChild(holidayEl);
       }
 
-      // Busy labels (blocked은 라벨 없음)
-      if (isBusy && !isPast) {
+      // Busy labels (blocked은 라벨 없음, 지난 날짜는 흐릿하게 표시)
+      if (isBusy || (isPast && hasEvents)) {
         const visibleEntries = busyEntries.filter(e => e.status !== 'blocked');
-        if (visibleEntries.length > 0) cell.classList.add('has-time');
+        if (visibleEntries.length > 0 && !isPast) cell.classList.add('has-time');
 
         visibleEntries.forEach(({ label, status, startTime, endTime, mode }) => {
           const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
