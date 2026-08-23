@@ -536,11 +536,11 @@
     // 8월
     '2026-08-01::blocked',
     '2026-08-02::blocked',
-    '2026-08-03:휴가:blocked',
-    '2026-08-04:휴가:blocked',
-    '2026-08-05:휴가:blocked',
-    '2026-08-06:휴가:blocked',
-    '2026-08-07:휴가:blocked',
+    '2026-08-03:내부 일정:휴무',
+    '2026-08-04:내부 일정:휴무',
+    '2026-08-05:내부 일정:휴무',
+    '2026-08-06:내부 일정:휴무',
+    '2026-08-07:내부 일정:휴무',
     '2026-08-08::blocked',
     '2026-08-09::blocked',
     '2026-08-10:광주전남 인프라 교육:confirmed:19:00:22:00:online',
@@ -704,6 +704,7 @@
     currentYear = today.getFullYear();
     currentMonth = today.getMonth();
     render();
+    updatePrevBtn();
   }
 
   function render() {
@@ -864,16 +865,28 @@
     setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
+  const MIN_YEAR = 2026, MIN_MONTH = 6; // 2026년 7월 (0-indexed)
+
+  function updatePrevBtn() {
+    const atMin = currentYear === MIN_YEAR && currentMonth <= MIN_MONTH;
+    document.getElementById('prevBtn').disabled = atMin;
+    document.getElementById('prevBtn').style.opacity = atMin ? '0.3' : '';
+    document.getElementById('prevBtn').style.cursor = atMin ? 'default' : '';
+  }
+
   document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentYear === MIN_YEAR && currentMonth <= MIN_MONTH) return;
     currentMonth--;
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     render();
+    updatePrevBtn();
   });
 
   document.getElementById('nextBtn').addEventListener('click', () => {
     currentMonth++;
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     render();
+    updatePrevBtn();
   });
 
   init();
