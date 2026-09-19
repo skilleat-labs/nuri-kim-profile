@@ -139,6 +139,45 @@
       50% { opacity: .4; }
     }
 
+    /* ── CLIENT TICKER ── */
+    .client-ticker {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      padding: 13px 0;
+      position: relative;
+    }
+    .client-ticker::before,
+    .client-ticker::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; width: 100px;
+      z-index: 2; pointer-events: none;
+    }
+    .client-ticker::before { left: 0; background: linear-gradient(to right, var(--navy), transparent); }
+    .client-ticker::after  { right: 0; background: linear-gradient(to left, var(--navy), transparent); }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 35s linear infinite;
+    }
+    .ticker-item {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: rgba(255,255,255,0.28);
+      text-transform: uppercase;
+      padding: 0 28px;
+      white-space: nowrap;
+    }
+    .ticker-sep {
+      font-size: 11px;
+      color: rgba(255,255,255,0.1);
+      align-self: center;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     .hero-name-kr {
       font-size: 13px; font-weight: 600; letter-spacing: 3px;
       color: rgba(255,255,255,0.45); text-transform: uppercase;
@@ -736,7 +775,7 @@
       <div class="hero-left reveal">
         <div class="status-pill">
           <span class="status-dot"></span>
-          AVAILABLE FOR 2026 Q3 — Q4 출강
+          9월 마감 · 10월 문의 가능
         </div>
         <div class="hero-name-kr">Kim Nuri</div>
         <h1 class="hero-name">Nuri Kim</h1>
@@ -791,6 +830,34 @@
     </div>
   </div>
 </section>
+
+<!-- CLIENT TICKER -->
+<div class="client-ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">LG화학</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">롯데케미칼</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">LG CNS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">LG전자</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">현대모비스</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">멀티캠퍼스</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">CoorsTek Korea</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">군산대학교</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">KOSS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">KMI</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">광주전남</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">LG화학</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">롯데케미칼</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">LG CNS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">LG전자</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">현대모비스</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">멀티캠퍼스</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">CoorsTek Korea</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">군산대학교</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">KOSS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">KMI</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">광주전남</span><span class="ticker-sep">·</span>
+  </div>
+</div>
 
 <!-- STATS -->
 <section class="sect-alt">
