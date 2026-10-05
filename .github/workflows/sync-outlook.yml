@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'calendar.html'
+  workflow_dispatch:
 
 jobs:
   sync:
