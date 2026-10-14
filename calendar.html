@@ -11,20 +11,21 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg:            #FFFFFF;
-      --bg-alt:        #F6F7F9;
+      --bg:            #FBFAF6;
+      --bg-alt:        #F5F2EA;
       --card:          #FFFFFF;
-      --border:        #E4E6EA;
-      --border-strong: #D5D8DE;
-      --text-heading:  #1A1A35;
-      --text-body:     #4A4E5A;
-      --text-muted:    #8A8F98;
-      --accent:        #E04E12;
-      --accent-hover:  #C4430E;
-      --accent-tint:   #FDEEE7;
-      --navy:          #1A1A35;
-      --busy-bg:       #F6F7F9;
-      --busy-text:     #C0C3CC;
+      --border:        #E7E2D4;
+      --border-strong: #D8D2C2;
+      --text-heading:  #11171C;
+      --text-body:     #45423B;
+      --text-muted:    #7A7568;
+      --accent:        #F5C43D;
+      --accent-hover:  #F8D063;
+      --accent-text:   #8A6200;
+      --accent-tint:   #FCEFC7;
+      --navy:          #11171C;
+      --busy-bg:       #F1EEE6;
+      --busy-text:     #B5AFA2;
     }
 
     html { scroll-behavior: smooth; }
@@ -41,7 +42,7 @@
 
     :focus:not(:focus-visible) { outline: none; }
     :focus-visible {
-      outline: 2px solid var(--accent-hover);
+      outline: 2px solid var(--navy);
       outline-offset: 2px;
       box-shadow: 0 0 0 4px var(--accent-tint);
       border-radius: 4px;
@@ -65,19 +66,19 @@
     .nav-mark {
       width: 30px; height: 30px; background: var(--accent);
       border-radius: 7px; display: flex; align-items: center;
-      justify-content: center; font-weight: 900; font-size: 15px; color: #fff;
+      justify-content: center; font-weight: 900; font-size: 17px; color: var(--navy);
       flex-shrink: 0;
     }
-    .nav-brand-name { font-weight: 700; font-size: 15px; color: #fff; }
+    .nav-brand-name { font-weight: 700; font-size: 17px; color: #fff; }
     .nav-right {
       display: flex; align-items: center; gap: 20px;
     }
     .nav-tagline {
-      font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 400;
+      font-size: 15px; color: rgba(255,255,255,0.4); font-weight: 400;
     }
     .nav-back {
       display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; color: rgba(255,255,255,0.6);
+      font-size: 15px; color: rgba(255,255,255,0.6);
       transition: color .2s; white-space: nowrap;
     }
     .nav-back:hover { color: #fff; }
@@ -97,7 +98,7 @@
       letter-spacing: -1.2px; margin-bottom: 8px; line-height: 1.15;
     }
     .page-hero p {
-      font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.6;
+      font-size: 18px; color: rgba(255,255,255,0.5); line-height: 1.6;
     }
     .page-hero .hint {
       display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -105,7 +106,7 @@
     }
     .legend-item {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 15px; color: rgba(255,255,255,0.5);
+      font-size: 17px; color: rgba(255,255,255,0.5);
     }
     .legend-dot {
       width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
@@ -150,10 +151,10 @@
     }
     .cal-header-cell {
       text-align: center; padding: 16px 0;
-      font-size: 13px; font-weight: 700; letter-spacing: 1px;
+      font-size: 15px; font-weight: 700; letter-spacing: 1px;
       color: var(--text-muted); text-transform: uppercase;
     }
-    .cal-header-cell:first-child { color: #E04E12; }
+    .cal-header-cell:first-child { color: #D0453A; }
     .cal-header-cell:last-child { color: #6B8CDA; }
 
     .cal-grid {
@@ -190,14 +191,14 @@
 
     /* Busy day with time info — highlighted yellow card */
     .cal-cell.busy.has-time {
-      background: #FEF9C3;
-      border: 1px solid #FDE047;
+      background: #F1EEE6;
+      border: 1px solid #D8D2C2;
     }
-    .cal-cell.busy.has-time .cal-day { color: #78350F; }
+    .cal-cell.busy.has-time .cal-day { color: var(--navy); }
 
     /* Schedule label pills */
     .cal-busy-label {
-      font-size: 11px; font-weight: 600;
+      font-size: 13px; font-weight: 600;
       margin-top: 4px; letter-spacing: .3px;
       display: block;
       padding: 2px 6px; border-radius: 4px;
@@ -205,8 +206,8 @@
     }
     .cal-busy-label.confirmed {
       background: var(--accent-tint);
-      color: var(--accent-hover);
-      border: 1px solid rgba(224,78,18,0.3);
+      color: var(--accent-text);
+      border: 1px solid rgba(245,196,61,0.6);
     }
     .cal-busy-label.tentative {
       background: transparent;
@@ -226,7 +227,7 @@
 
     .cal-mode-badge {
       display: inline-block;
-      font-size: 9px; font-weight: 700; letter-spacing: .4px;
+      font-size: 11px; font-weight: 700; letter-spacing: .4px;
       padding: 1px 5px; border-radius: 3px;
       margin-top: 3px; text-transform: uppercase;
     }
@@ -238,7 +239,7 @@
     }
 
     .cal-time {
-      font-size: 13px; font-weight: 700;
+      font-size: 15px; font-weight: 700;
       color: var(--text-heading);
       margin-top: 4px; padding: 0 2px;
       line-height: 1.3;
@@ -258,7 +259,7 @@
     .cal-cell.available:hover {
       background: var(--accent-tint);
     }
-    .cal-cell.available:hover .cal-day { color: var(--accent); }
+    .cal-cell.available:hover .cal-day { color: var(--accent-text); }
     .cal-cell.available:hover .cal-hover-hint { opacity: 1; }
 
     /* Today */
@@ -273,13 +274,13 @@
 
     .cal-day-wrap { display: flex; align-items: center; gap: 0; }
     .cal-day {
-      font-size: 16px; font-weight: 600;
+      font-size: 18px; font-weight: 600;
       color: var(--text-heading);
       line-height: 1;
       width: 34px; height: 34px;
       display: flex; align-items: center; justify-content: center;
     }
-    .cal-cell.sunday .cal-day { color: #E04E12; }
+    .cal-cell.sunday .cal-day { color: #D0453A; }
     .cal-cell.sunday.past .cal-day,
     .cal-cell.sunday.busy .cal-day { color: var(--busy-text); }
     .cal-cell.saturday .cal-day { color: #6B8CDA; }
@@ -287,11 +288,11 @@
     .cal-cell.saturday.busy .cal-day { color: var(--busy-text); }
 
     /* Holiday */
-    .cal-cell.holiday .cal-day { color: #E04E12 !important; }
+    .cal-cell.holiday .cal-day { color: #D0453A !important; }
     .cal-cell.holiday.past .cal-day { color: var(--busy-text) !important; }
     .cal-holiday-name {
-      font-size: 10px; font-weight: 600;
-      color: #E04E12;
+      font-size: 12px; font-weight: 600;
+      color: #D0453A;
       margin-top: 3px;
       display: block;
       line-height: 1.3;
@@ -301,14 +302,14 @@
     .cal-hover-hint {
       opacity: 0;
       transition: opacity .15s;
-      font-size: 12px; color: var(--accent-hover); font-weight: 600;
+      font-size: 14px; color: var(--accent-text); font-weight: 600;
       margin-top: 8px; line-height: 1.3;
     }
 
     /* Events on a day */
     .cal-events { margin-top: 5px; display: flex; flex-direction: column; gap: 3px; }
     .cal-event-pill {
-      font-size: 10px; font-weight: 600;
+      font-size: 12px; font-weight: 600;
       background: var(--navy); color: rgba(255,255,255,0.85);
       border-radius: 4px; padding: 2px 6px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -328,21 +329,21 @@
       width: 36px; height: 36px; flex-shrink: 0;
       background: var(--accent-tint); border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--accent-hover);
+      color: var(--accent-text);
     }
     .cal-notice-icon svg { width: 17px; height: 17px; }
     .cal-notice-text { flex: 1; }
-    .cal-notice-text strong { font-size: 15px; color: var(--text-heading); display: block; margin-bottom: 4px; }
-    .cal-notice-text p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-    .cal-notice-text a { color: var(--accent-hover); font-weight: 600; }
+    .cal-notice-text strong { font-size: 17px; color: var(--text-heading); display: block; margin-bottom: 4px; }
+    .cal-notice-text p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .cal-notice-text a { color: var(--accent-text); font-weight: 600; }
 
     /* ── TOAST ── */
     #toast {
       position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(12px);
       background: var(--navy); color: #fff;
       padding: 12px 22px; border-radius: 10px;
-      font-size: 14px; font-weight: 500;
-      box-shadow: 0 4px 20px rgba(26,26,53,0.25);
+      font-size: 16px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(17,23,28,0.25);
       opacity: 0; pointer-events: none;
       transition: opacity .25s, transform .25s;
       white-space: nowrap; z-index: 999;
@@ -354,15 +355,15 @@
       .nav-tagline { display: none; }
       .page-hero { padding: 36px 20px 40px; }
       .page-hero h1 { font-size: 32px; }
-      .page-hero p { font-size: 16px; }
-      .legend-item { font-size: 13px; }
+      .page-hero p { font-size: 18px; }
+      .legend-item { font-size: 15px; }
       .main { padding: 32px 16px 60px; }
       .nav-inner { padding: 0 20px; }
       .cal-cell { min-height: 80px; padding: 8px 8px; }
-      .cal-day { font-size: 13px; width: 26px; height: 26px; }
+      .cal-day { font-size: 15px; width: 26px; height: 26px; }
       .cal-hover-hint { display: none; }
       .cal-event-pill { display: none; }
-      .cal-busy-label { font-size: 10px; }
+      .cal-busy-label { font-size: 12px; }
       .cal-month-label { font-size: 22px; }
     }
 
@@ -375,7 +376,7 @@
       letter-spacing: -0.5px; margin-bottom: 6px;
     }
     .reviews-sub {
-      font-size: 14px; color: var(--text-muted); margin-bottom: 28px;
+      font-size: 16px; color: var(--text-muted); margin-bottom: 28px;
     }
     .reviews-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -387,7 +388,7 @@
       transition: box-shadow .2s, transform .2s;
     }
     .review-card:hover {
-      box-shadow: 0 8px 32px rgba(26,26,53,0.1);
+      box-shadow: 0 8px 32px rgba(17,23,28,0.1);
       transform: translateY(-2px);
     }
     .review-photo {
@@ -400,18 +401,18 @@
     }
     .review-body { padding: 18px 20px; }
     .review-date {
-      display: inline-block; font-size: 11px; font-weight: 700;
-      color: var(--accent); background: var(--accent-tint);
+      display: inline-block; font-size: 13px; font-weight: 700;
+      color: var(--accent-text); background: var(--accent-tint);
       padding: 2px 8px; border-radius: 4px; margin-bottom: 8px;
     }
     .review-title {
-      font-size: 15px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px;
+      font-size: 17px; font-weight: 700; color: var(--text-heading); margin-bottom: 6px;
     }
     .review-comment {
-      font-size: 13px; color: var(--text-body); line-height: 1.6;
+      font-size: 15px; color: var(--text-body); line-height: 1.6;
     }
     .reviews-empty {
-      text-align: center; padding: 48px; color: var(--text-muted); font-size: 14px;
+      text-align: center; padding: 48px; color: var(--text-muted); font-size: 16px;
       grid-column: 1 / -1;
     }
     @media (max-width: 600px) {
@@ -449,13 +450,13 @@
     <div class="hint">
       <span class="legend-item"><span class="legend-dot available"></span>문의 가능</span>
       <span class="legend-item">
-        <span style="display:inline-block;width:36px;height:16px;background:var(--accent-tint);border:1px solid rgba(224,78,18,0.3);border-radius:4px;flex-shrink:0"></span>확정
+        <span style="display:inline-block;width:36px;height:16px;background:var(--accent-tint);border:1px solid rgba(245,196,61,0.6);border-radius:4px;flex-shrink:0"></span>확정
       </span>
       <span class="legend-item">
         <span style="display:inline-block;width:36px;height:16px;border:1.5px dashed rgba(255,255,255,0.35);border-radius:4px;flex-shrink:0"></span>미확정
       </span>
       <span class="legend-item"><span class="legend-dot past"></span>지난 날짜</span>
-      <span class="legend-item" style="color:rgba(255,255,255,0.5);font-size:15px;">🔴 공휴일</span>
+      <span class="legend-item" style="color:rgba(255,255,255,0.5);font-size:17px;">🔴 공휴일</span>
     </div>
   </div>
 </div>
