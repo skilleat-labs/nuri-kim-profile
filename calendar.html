@@ -419,6 +419,42 @@
       .reviews-section { padding: 0 16px 60px; }
       .reviews-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── MOBILE: 달력은 점으로, 상세는 아래 일정 리스트로 ── */
+    .cal-dots-m, .cal-agenda { display: none; }
+    @media (max-width: 600px) {
+      .cal-cell {
+        min-height: 56px; padding: 6px 0;
+        display: flex; flex-direction: column; align-items: center;
+      }
+      .cal-cell.busy.has-time { border: none; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .cal-cell:nth-child(7n).busy.has-time { border-right: none; }
+      .cal-event-block, .cal-holiday-name { display: none; }
+      .cal-dots-m { display: flex; gap: 3px; margin-top: 4px; }
+      .cal-dots-m i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+      .cal-dots-m i.tentative { background: transparent; border: 1px solid var(--text-muted); }
+      .cal-agenda {
+        display: block; margin-top: 16px;
+        background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+        overflow: hidden;
+      }
+      .ag-head { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+      .ag-head strong { display: block; font-size: 16px; color: var(--text-heading); }
+      .ag-head span { font-size: 13px; color: var(--text-muted); }
+      .ag-row {
+        display: grid; grid-template-columns: 52px 1fr; gap: 12px;
+        padding: 12px 16px; border-bottom: 1px solid var(--border);
+      }
+      .ag-row:last-child { border-bottom: none; }
+      .ag-date { font-size: 18px; font-weight: 800; color: var(--text-heading); line-height: 1.1; }
+      .ag-date small { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+      .ag-item + .ag-item { margin-top: 8px; }
+      .ag-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--text-heading); }
+      .ag-meta .cal-mode-badge { margin-top: 0; }
+      .ag-label { font-size: 14px; color: var(--text-body); margin-top: 2px; word-break: keep-all; }
+      .ag-label.tentative { color: var(--text-muted); }
+      .ag-empty { padding: 20px 16px; font-size: 14px; color: var(--text-muted); }
+    }
   </style>
 </head>
 <body>
@@ -487,6 +523,7 @@
     </div>
     <div class="cal-grid" id="calGrid"></div>
   </div>
+  <div class="cal-agenda" id="calAgenda"></div>
 
   <div class="cal-notice">
     <div class="cal-notice-icon">
@@ -758,6 +795,7 @@
 
     const grid = document.getElementById('calGrid');
     grid.innerHTML = '';
+    const agendaDays = [];
 
     const firstDay = new Date(currentYear, currentMonth, 1).getDay(); // 0=Sun
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -828,6 +866,19 @@
           .sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
         if (visibleEntries.length > 0 && !isPast) cell.classList.add('has-time');
 
+        // 모바일용 점 표시 (최대 3개)
+        if (!isPast && visibleEntries.length > 0) {
+          const dots = document.createElement('div');
+          dots.className = 'cal-dots-m';
+          visibleEntries.slice(0, 3).forEach(e => {
+            const dot = document.createElement('i');
+            if (e.status === 'tentative') dot.className = 'tentative';
+            dots.appendChild(dot);
+          });
+          cell.appendChild(dots);
+          agendaDays.push({ d, dow, entries: visibleEntries });
+        }
+
         visibleEntries.forEach(({ label, status, startTime, endTime, mode }) => {
           const tipTime = (startTime && endTime) ? ` (${startTime}~${endTime})` : '';
 
@@ -895,6 +946,31 @@
 
       grid.appendChild(cell);
     }
+
+    renderAgenda(agendaDays);
+  }
+
+  // 모바일 전용: 이번 달 남은 일정 리스트
+  function renderAgenda(days) {
+    const el = document.getElementById('calAgenda');
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const head = `<div class="ag-head"><strong>${currentMonth + 1}월 일정</strong>
+      <span>점 없는 날짜를 누르면 문의 메일이 작성됩니다</span></div>`;
+    if (!days.length) {
+      el.innerHTML = head + '<div class="ag-empty">이번 달 남은 일정이 없습니다. 모든 날짜 문의 가능해요.</div>';
+      return;
+    }
+    el.innerHTML = head + days.map(({ d, dow, entries }) => `
+      <div class="ag-row">
+        <div class="ag-date">${d}<small>${DAY_KO[dow]}요일</small></div>
+        <div>${entries.map(({ label, status, startTime, endTime, mode }) => `
+          <div class="ag-item">
+            <div class="ag-meta">${startTime ? esc(startTime) + (endTime ? '~' + esc(endTime) : '~') : ''}
+              ${mode === 'online' || mode === 'offline' ? `<span class="cal-mode-badge ${mode}">${mode === 'online' ? '온라인' : '오프라인'}</span>` : ''}</div>
+            <div class="ag-label ${status}">${status === 'tentative' ? '△ ' : ''}${esc(label)}</div>
+          </div>`).join('')}
+        </div>
+      </div>`).join('');
   }
 
   function formatDate(y, m, d) {
